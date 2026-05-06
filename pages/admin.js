@@ -4,6 +4,7 @@ export default function Admin() {
   const [data, setData] = useState({ stats: { registrados: 0, pendientes: 0, activos: 0, recaudado: 0 }, usuarios: [] });
   const [tab, setTab] = useState('Pendiente_Pago');
   const [accesos, setAccesos] = useState(null);
+  const [verAccesos, setVerAccesos] = useState(null);
   const [cargando, setCargando] = useState(true);
 
   async function cargar() {
@@ -142,7 +143,9 @@ export default function Admin() {
                         </>
                       )}
                       {u.estado === 'Activo' && (
-                        <span style={{ color: '#1D9E75', fontWeight: 600, marginRight: 8, fontSize: 12 }}>✓ Activo</span>
+                        <>
+                          <button onClick={() => setVerAccesos(u)} style={{ padding: '6px 12px', background: '#042C53', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginRight: 6, fontWeight: 600, fontSize: 12 }}>🔑 Ver accesos</button>
+                        </>
                       )}
                       <button onClick={() => eliminar(u.id, u.nombre)} style={{ padding: '6px 10px', background: '#1A1A1A', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 12 }} title="Eliminar permanentemente">🗑️</button>
                     </td>
@@ -153,7 +156,27 @@ export default function Admin() {
           )}
         </div>
       </div>
+{verAccesos && (
+        <div onClick={() => setVerAccesos(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: 36 }}>
+            <div style={{ fontSize: 48, color: '#042C53', textAlign: 'center', marginBottom: 12 }}>🔑</div>
+            <h2 style={{ fontSize: 22, fontWeight: 800, color: '#042C53', textAlign: 'center', marginBottom: 8 }}>Accesos de {verAccesos.nombre}</h2>
+            <p style={{ color: '#666', textAlign: 'center', marginBottom: 20, fontSize: 13 }}>{verAccesos.email}</p>
 
+            <div style={{ background: '#F8F9FB', padding: 18, borderRadius: 12, marginBottom: 16 }}>
+              <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', fontWeight: 600 }}>Usuario</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: '#042C53', fontFamily: 'monospace' }}>{verAccesos.usuario || '(no generado)'}</div>
+              <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', fontWeight: 600, marginTop: 12 }}>Password</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: '#042C53', fontFamily: 'monospace' }}>{verAccesos.password || '(no generado)'}</div>
+            </div>
+
+            {verAccesos.usuario && verAccesos.password && (
+              <a href={`https://wa.me/52${verAccesos.telefono}?text=${encodeURIComponent(`Hola ${verAccesos.nombre}! Aqui tus accesos para la Quiniela Mundial 2026:\n\nUsuario: ${verAccesos.usuario}\nPassword: ${verAccesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app/jugar`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Reenviar por WhatsApp</a>
+            )}
+            <button onClick={() => setVerAccesos(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
+          </div>
+        </div>
+      )}
       {accesos && (
         <div onClick={() => setAccesos(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: 36 }}>
