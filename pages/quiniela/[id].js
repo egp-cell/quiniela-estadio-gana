@@ -55,7 +55,7 @@ export default function PronosticosQuiniela() {
         setData(d);
         setPronosticos(d.pronosticos);
 
-        // Set primer dia con partidos como activo
+        // Set primer día con partidos como activo
         const dias = agruparPorDia(d.partidos);
         const primerDia = Object.keys(dias)[0];
         if (primerDia) setDiaActivo(primerDia);
@@ -74,7 +74,7 @@ export default function PronosticosQuiniela() {
         claveDia = 'zzz_Por definir'; // prefijo para que quede al final
       } else {
         const fecha = new Date(p.fecha_hora);
-        // Usar hora local de Mexico para agrupar
+        // Usar hora local de México para agrupar
         const offset = -6 * 60; // CDMX UTC-6 en minutos
         const fechaMx = new Date(fecha.getTime() + offset * 60 * 1000);
         claveDia = fechaMx.toISOString().split('T')[0];
@@ -83,7 +83,7 @@ export default function PronosticosQuiniela() {
       grupos[claveDia].push(p);
     });
 
-    // Ordenar partidos dentro de cada dia por hora ascendente
+    // Ordenar partidos dentro de cada día por hora ascendente
     Object.keys(grupos).forEach(dia => {
       grupos[dia].sort((a, b) => {
         if (!a.fecha_hora) return 1;
@@ -92,7 +92,7 @@ export default function PronosticosQuiniela() {
       });
     });
 
-    // Re-ordenar las claves: dias con fecha primero, "Por definir" al final
+    // Re-ordenar las claves: días con fecha primero, "Por definir" al final
     const ordenado = {};
     const claves = Object.keys(grupos).sort();
     claves.forEach(k => {
@@ -106,7 +106,7 @@ export default function PronosticosQuiniela() {
   function formatearDia(claveDia) {
     if (claveDia === 'Por definir') return 'Por definir';
     const fecha = new Date(claveDia + 'T12:00:00');
-    const dias = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
+    const dias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
     const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
     return `${dias[fecha.getDay()]} ${fecha.getDate()} ${meses[fecha.getMonth()]}`;
   }
@@ -167,7 +167,7 @@ export default function PronosticosQuiniela() {
 
     // Solo guardar si ambos campos tienen valor
     if (nuevo.goles_local !== undefined && nuevo.goles_local !== '' && nuevo.goles_visitante !== undefined && nuevo.goles_visitante !== '') {
-      // Debounce: esperar 800ms despues del ultimo cambio
+      // Debounce: esperar 800ms después del último cambio
       clearTimeout(window[`debounce_${partidoId}`]);
       window[`debounce_${partidoId}`] = setTimeout(() => {
         guardarPronostico(partidoId, nuevo.goles_local, nuevo.goles_visitante);
@@ -213,7 +213,7 @@ export default function PronosticosQuiniela() {
         </div>
       </header>
 
-      {/* Tabs de dias */}
+      {/* Tabs de días */}
       <div style={{ background: 'white', borderBottom: '1px solid #E0E0E0', overflowX: 'auto', position: 'sticky', top: 90, zIndex: 50 }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', gap: 4, padding: '12px 16px' }}>
           {clavesDias.map(clave => {
@@ -257,7 +257,7 @@ export default function PronosticosQuiniela() {
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '30px 20px' }}>
         {partidosDelDia.length === 0 ? (
-          <div style={{ textAlign: 'center', color: '#888', padding: 40 }}>No hay partidos en este dia</div>
+          <div style={{ textAlign: 'center', color: '#888', padding: 40 }}>No hay partidos en este día</div>
         ) : (
           partidosDelDia.map(p => {
             const empezado = partidoEmpezado(p.fecha_hora);
