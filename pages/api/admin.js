@@ -33,35 +33,46 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { accion, usuarioId } = req.body;
+      const { accion, usuarioId, cantidadAprobada } = req.body;
 
       if (accion === 'aprobar') {
         const { data: usuario } = await supabase.from('usuarios').select('*').eq('id', usuarioId).single();
         if (!usuario) return res.status(404).json({ exito: false, error: 'Usuario no encontrado' });
 
+        // Si no se especifica cantidadAprobada, usar la del registro original
+        const cantidadFinal = cantidadAprobada !== undefined && cantidadAprobada !== null
+          ? parseInt(cantidadAprobada)
+          : usuario.cantidad_quinielas;
+
+        if (cantidadFinal < 1 || cantidadFinal > usuario.cantidad_quinielas) {
+          return res.status(400).json({ exito: false, error: `Cantidad invalida. Debe ser entre 1 y ${usuario.cantidad_quinielas}` });
+        }
+
         const username = usuario.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') + usuario.id;
         const password = generarPassword();
-        const monto = usuario.cantidad_quinielas * 3000;
+        const monto = cantidadFinal * 3000;
 
         await supabase.from('usuarios').update({
           estado: 'Activo',
           usuario: username,
           password: password,
+          cantidad_quinielas: cantidadFinal,
           total_pagado: monto,
           fecha_aprobacion: new Date().toISOString()
         }).eq('id', usuarioId);
 
         await supabase.from('pagos').update({
           estado: 'Confirmado',
+          monto: monto,
           fecha_confirmacion: new Date().toISOString()
         }).eq('usuario_id', usuarioId);
 
-        // Crear las N quinielas
+        // Crear las N quinielas (solo las pagadas)
         const quinielas = [];
-        for (let i = 1; i <= usuario.cantidad_quinielas; i++) {
+        for (let i = 1; i <= cantidadFinal; i++) {
           quinielas.push({
             usuario_id: usuarioId,
-            nombre: usuario.cantidad_quinielas > 1 ? `${usuario.nombre} #${i}` : usuario.nombre,
+            nombre: cantidadFinal > 1 ? `${usuario.nombre} #${i}` : usuario.nombre,
             estado: 'Pagada',
             puntos: 0
           });
@@ -73,7 +84,9 @@ export default async function handler(req, res) {
           nombre: usuario.nombre,
           telefono: usuario.telefono,
           usuario: username,
-          password: password
+          password: password,
+          cantidad: cantidadFinal,
+          monto: monto
         });
       }
 
