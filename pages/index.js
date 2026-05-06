@@ -25,6 +25,14 @@ export default function Home() {
   const [exito, setExito] = useState(null);
   const [reglamento, setReglamento] = useState(false);
   const [countdown, setCountdown] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     fetch('/api/stats').then(r => r.json()).then(setStats).catch(() => {});
@@ -83,30 +91,30 @@ export default function Home() {
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#F8F9FB', minHeight: '100vh' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      <div style={{ background: '#021A33', color: 'white', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ display: 'flex', gap: 10, flex: 1, justifyContent: 'center' }}>
-          <button onClick={() => setReglamento(true)} style={{ padding: '8px 18px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>📖 Reglamento</button>
-          <a href="#registro" style={{ padding: '8px 18px', background: '#FAC775', color: '#412402', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13 }}>Inscribirme ahora</a>
+      <div style={{ background: '#021A33', color: 'white', padding: isMobile ? '10px 12px' : '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: isMobile ? 6 : 10, position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ display: 'flex', gap: isMobile ? 6 : 10, flex: 1, justifyContent: isMobile ? 'flex-start' : 'center' }}>
+          <button onClick={() => setReglamento(true)} style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>📖 {isMobile ? 'Reglas' : 'Reglamento'}</button>
+          <a href="#registro" style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: '#FAC775', color: '#412402', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>Inscribirme</a>
         </div>
-        <a href="/jugar" style={{ padding: '12px 28px', background: '#1D9E75', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: 15, boxShadow: '0 4px 12px rgba(29,158,117,0.4)' }}>🔐 Log In</a>
+        <a href="/jugar" style={{ padding: isMobile ? '8px 16px' : '12px 28px', background: '#1D9E75', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: isMobile ? 13 : 15, boxShadow: '0 4px 12px rgba(29,158,117,0.4)', whiteSpace: 'nowrap' }}>🔐 Log In</a>
       </div>
 
-      <section style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', padding: '60px 20px 100px' }}>
+      <section style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', padding: isMobile ? '40px 20px 80px' : '60px 20px 100px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'center' }}>
-            <div>
-              <h1 style={{ fontSize: 56, fontWeight: 900, lineHeight: 1.05, marginBottom: 8 }}>Quiniela Mundial</h1>
-              <div style={{ fontSize: 110, fontWeight: 900, lineHeight: 0.9, color: '#FAC775', marginBottom: 24 }}>2026</div>
-              <p style={{ fontSize: 17, opacity: 0.85, marginBottom: 28 }}>Inscribete, predice marcadores y compite por el primer lugar.</p>
-              <a href="#registro" style={{ padding: '14px 26px', background: '#FAC775', color: '#412402', borderRadius: 10, textDecoration: 'none', fontWeight: 700 }}>Inscribirme</a>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 30 : 40, alignItems: 'center' }}>
+            <div style={{ textAlign: isMobile ? 'center' : 'left' }}>
+              <h1 style={{ fontSize: isMobile ? 38 : 56, fontWeight: 900, lineHeight: 1.05, marginBottom: 8 }}>Quiniela Mundial</h1>
+              <div style={{ fontSize: isMobile ? 80 : 110, fontWeight: 900, lineHeight: 0.9, color: '#FAC775', marginBottom: 24 }}>2026</div>
+              <p style={{ fontSize: isMobile ? 15 : 17, opacity: 0.85, marginBottom: 28 }}>Inscribete, predice marcadores y compite por el primer lugar.</p>
+              <a href="#registro" style={{ display: 'inline-block', padding: '14px 26px', background: '#FAC775', color: '#412402', borderRadius: 10, textDecoration: 'none', fontWeight: 700 }}>Inscribirme</a>
             </div>
-            <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 20, padding: 28 }}>
+            <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 20, padding: isMobile ? 20 : 28 }}>
               <div style={{ fontSize: 12, letterSpacing: 2, opacity: 0.7, marginBottom: 16, textAlign: 'center' }}>⚽ INICIA EN</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: isMobile ? 6 : 10 }}>
                 {[['Dias', countdown.d], ['Horas', countdown.h], ['Min', countdown.m], ['Seg', countdown.s]].map(([l, v], i) => (
-                  <div key={i} style={{ textAlign: 'center', padding: '14px 8px', background: 'rgba(255,255,255,0.08)', borderRadius: 12 }}>
-                    <div style={{ fontSize: 32, fontWeight: 800, color: '#FAC775' }}>{String(v).padStart(2, '0')}</div>
-                    <div style={{ fontSize: 10, opacity: 0.7, textTransform: 'uppercase' }}>{l}</div>
+                  <div key={i} style={{ textAlign: 'center', padding: isMobile ? '10px 4px' : '14px 8px', background: 'rgba(255,255,255,0.08)', borderRadius: 12 }}>
+                    <div style={{ fontSize: isMobile ? 22 : 32, fontWeight: 800, color: '#FAC775' }}>{String(v).padStart(2, '0')}</div>
+                    <div style={{ fontSize: isMobile ? 9 : 10, opacity: 0.7, textTransform: 'uppercase' }}>{l}</div>
                   </div>
                 ))}
               </div>
@@ -115,24 +123,24 @@ export default function Home() {
         </div>
       </section>
 
-      <div style={{ background: 'white', maxWidth: 1000, margin: '-50px auto 0', borderRadius: 20, padding: 32, boxShadow: '0 20px 60px rgba(0,0,0,0.1)', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24, position: 'relative', zIndex: 2 }}>
+      <div style={{ background: 'white', maxWidth: 1000, margin: isMobile ? '-40px 16px 0' : '-50px auto 0', borderRadius: 20, padding: isMobile ? 20 : 32, boxShadow: '0 20px 60px rgba(0,0,0,0.1)', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: isMobile ? 16 : 24, position: 'relative', zIndex: 2 }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 11, color: '#888', letterSpacing: 1.5, fontWeight: 600 }}>INSCRIPCION</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#BA7517' }}>$3,000 MXN</div>
+          <div style={{ fontSize: isMobile ? 28 : 32, fontWeight: 800, color: '#BA7517' }}>$3,000 MXN</div>
         </div>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 11, color: '#888', letterSpacing: 1.5, fontWeight: 600 }}>QUINIELAS INSCRITAS</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#042C53' }}>{stats.totalQuinielas}</div>
+          <div style={{ fontSize: isMobile ? 28 : 32, fontWeight: 800, color: '#042C53' }}>{stats.totalQuinielas}</div>
         </div>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 11, color: '#888', letterSpacing: 1.5, fontWeight: 600 }}>BOLSA ACTUAL</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#1D9E75' }}>${bolsa.toLocaleString()}</div>
+          <div style={{ fontSize: isMobile ? 28 : 32, fontWeight: 800, color: '#1D9E75' }}>${bolsa.toLocaleString()}</div>
         </div>
       </div>
 
-      <section style={{ padding: '80px 20px', background: 'linear-gradient(180deg, #F8F9FB, #EBEEF3)' }}>
-        <h2 style={{ fontSize: 36, fontWeight: 800, textAlign: 'center', color: '#042C53', marginBottom: 40 }}>Los 12 grupos del Mundial</h2>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
+      <section style={{ padding: isMobile ? '60px 16px' : '80px 20px', background: 'linear-gradient(180deg, #F8F9FB, #EBEEF3)' }}>
+        <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', color: '#042C53', marginBottom: isMobile ? 28 : 40 }}>Los 12 grupos del Mundial</h2>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
           {Object.keys(GRUPOS).map(letra => (
             <div key={letra} style={{ background: 'white', borderRadius: 14, overflow: 'hidden', border: '1px solid #E0E0E0' }}>
               <div style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', padding: '14px 18px', fontWeight: 800 }}>Grupo {letra}</div>
@@ -147,18 +155,18 @@ export default function Home() {
         </div>
       </section>
 
-      <section style={{ background: 'linear-gradient(180deg, #042C53, #0C447C)', color: 'white', padding: '60px 20px' }}>
-        <h2 style={{ fontSize: 36, fontWeight: 800, textAlign: 'center', marginBottom: 32 }}>Premios del Mundial</h2>
-        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center', background: 'rgba(255,255,255,0.08)', borderRadius: 24, padding: 40, marginBottom: 24 }}>
+      <section style={{ background: 'linear-gradient(180deg, #042C53, #0C447C)', color: 'white', padding: isMobile ? '50px 16px' : '60px 20px' }}>
+        <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', marginBottom: isMobile ? 24 : 32 }}>Premios del Mundial</h2>
+        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center', background: 'rgba(255,255,255,0.08)', borderRadius: 24, padding: isMobile ? 28 : 40, marginBottom: 24 }}>
           <div style={{ fontSize: 12, letterSpacing: 3, opacity: 0.7, marginBottom: 12 }}>BOLSA ACUMULADA</div>
-          <div style={{ fontSize: 64, fontWeight: 900, color: '#FAC775' }}>${bolsa.toLocaleString()}</div>
+          <div style={{ fontSize: isMobile ? 44 : 64, fontWeight: 900, color: '#FAC775' }}>${bolsa.toLocaleString()}</div>
         </div>
-        <div style={{ maxWidth: 900, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
           {[['🥇', 'PRIMER LUGAR', 0.56, 56, '#FAC775'], ['🥈', 'SEGUNDO LUGAR', 0.23, 23, '#E0E0E0'], ['🥉', 'TERCER LUGAR', 0.14, 14, '#CD9C5C']].map(([ic, t, p, pct, c], i) => (
-            <div key={i} style={{ borderRadius: 20, padding: 28, textAlign: 'center', background: 'rgba(255,255,255,0.05)' }}>
+            <div key={i} style={{ borderRadius: 20, padding: isMobile ? 20 : 28, textAlign: 'center', background: 'rgba(255,255,255,0.05)' }}>
               <div style={{ fontSize: 40 }}>{ic}</div>
               <div style={{ fontSize: 11, letterSpacing: 2, opacity: 0.8 }}>{t}</div>
-              <div style={{ fontSize: 32, fontWeight: 800, color: c }}>${Math.round(bolsa * p).toLocaleString()}</div>
+              <div style={{ fontSize: isMobile ? 26 : 32, fontWeight: 800, color: c }}>${Math.round(bolsa * p).toLocaleString()}</div>
               <div style={{ fontSize: 12, opacity: 0.7 }}>{pct}% de la bolsa</div>
             </div>
           ))}
@@ -167,13 +175,14 @@ export default function Home() {
           Comision del organizador: 7% de la bolsa
         </div>
       </section>
-{topRanking.length > 0 && (
-        <section style={{ background: '#F8F9FB', padding: '60px 20px' }}>
+
+      {topRanking.length > 0 && (
+        <section style={{ background: '#F8F9FB', padding: isMobile ? '50px 16px' : '60px 20px' }}>
           <div style={{ maxWidth: 700, margin: '0 auto' }}>
-            <h2 style={{ fontSize: 36, fontWeight: 800, textAlign: 'center', marginBottom: 8, color: '#042C53' }}>🏆 Top 5</h2>
-            <p style={{ textAlign: 'center', color: '#666', fontSize: 14, marginBottom: 32 }}>Los líderes de la quiniela en este momento</p>
+            <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', marginBottom: 8, color: '#042C53' }}>🏆 Top 5</h2>
+            <p style={{ textAlign: 'center', color: '#666', fontSize: 14, marginBottom: isMobile ? 24 : 32 }}>Los líderes de la quiniela en este momento</p>
             <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', border: '1px solid #E0E0E0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px', padding: '14px 20px', background: '#F8F9FB', fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '50px 1fr 60px' : '60px 1fr 80px', padding: isMobile ? '12px 14px' : '14px 20px', background: '#F8F9FB', fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
                 <div style={{ textAlign: 'center' }}>Pos</div>
                 <div>Quiniela</div>
                 <div style={{ textAlign: 'center' }}>Pts</div>
@@ -184,17 +193,17 @@ export default function Home() {
                               : q.posicion === 3 ? { bg: 'linear-gradient(135deg, #CD7F32, #A0522D)', txt: 'white', emoji: '🥉' }
                               : { bg: '#F0F2F5', txt: '#666', emoji: '' };
                 return (
-                  <div key={q.id} style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px', padding: '16px 20px', borderBottom: '1px solid #F0F2F5', alignItems: 'center' }}>
+                  <div key={q.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '50px 1fr 60px' : '60px 1fr 80px', padding: isMobile ? '14px 14px' : '16px 20px', borderBottom: '1px solid #F0F2F5', alignItems: 'center' }}>
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: '50%', background: colores.bg, color: colores.txt, fontWeight: 800, fontSize: 13 }}>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? 32 : 38, height: isMobile ? 32 : 38, borderRadius: '50%', background: colores.bg, color: colores.txt, fontWeight: 800, fontSize: isMobile ? 11 : 13 }}>
                         {colores.emoji || `#${q.posicion}`}
                       </div>
                     </div>
                     <div>
-                      <div style={{ fontWeight: 700, color: '#042C53', fontSize: 15 }}>{q.nombreQuiniela}</div>
-                      <div style={{ fontSize: 12, color: '#888' }}>{q.nombreUsuario}</div>
+                      <div style={{ fontWeight: 700, color: '#042C53', fontSize: isMobile ? 13 : 15 }}>{q.nombreQuiniela}</div>
+                      <div style={{ fontSize: isMobile ? 11 : 12, color: '#888' }}>{q.nombreUsuario}</div>
                     </div>
-                    <div style={{ textAlign: 'center', fontSize: 22, fontWeight: 900, color: '#042C53' }}>{q.puntos}</div>
+                    <div style={{ textAlign: 'center', fontSize: isMobile ? 18 : 22, fontWeight: 900, color: '#042C53' }}>{q.puntos}</div>
                   </div>
                 );
               })}
@@ -205,26 +214,27 @@ export default function Home() {
           </div>
         </section>
       )}
-      <section id="registro" style={{ padding: '80px 20px', background: 'white' }}>
-        <h2 style={{ fontSize: 36, fontWeight: 800, textAlign: 'center', color: '#042C53', marginBottom: 40 }}>Inscribete</h2>
-        <form onSubmit={enviarForm} style={{ maxWidth: 600, margin: '0 auto', background: 'white', padding: 40, borderRadius: 24, border: '1px solid #E0E0E0' }}>
-          <input required placeholder="Nombre completo" value={form.nombre} onChange={e => setForm({ ...form, nombre: e.target.value })} style={{ width: '100%', padding: 14, marginBottom: 14, border: '1.5px solid #E0E0E0', borderRadius: 10, fontSize: 15 }} />
-          <input required type="email" placeholder="Email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} style={{ width: '100%', padding: 14, marginBottom: 14, border: '1.5px solid #E0E0E0', borderRadius: 10, fontSize: 15 }} />
-          <input required placeholder="WhatsApp" value={form.telefono} onChange={e => setForm({ ...form, telefono: e.target.value })} style={{ width: '100%', padding: 14, marginBottom: 14, border: '1.5px solid #E0E0E0', borderRadius: 10, fontSize: 15 }} />
+
+      <section id="registro" style={{ padding: isMobile ? '60px 16px' : '80px 20px', background: 'white' }}>
+        <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', color: '#042C53', marginBottom: isMobile ? 28 : 40 }}>Inscribete</h2>
+        <form onSubmit={enviarForm} style={{ maxWidth: 600, margin: '0 auto', background: 'white', padding: isMobile ? 24 : 40, borderRadius: 24, border: '1px solid #E0E0E0' }}>
+          <input required placeholder="Nombre completo" value={form.nombre} onChange={e => setForm({ ...form, nombre: e.target.value })} style={{ width: '100%', padding: 14, marginBottom: 14, border: '1.5px solid #E0E0E0', borderRadius: 10, fontSize: 15, boxSizing: 'border-box' }} />
+          <input required type="email" placeholder="Email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} style={{ width: '100%', padding: 14, marginBottom: 14, border: '1.5px solid #E0E0E0', borderRadius: 10, fontSize: 15, boxSizing: 'border-box' }} />
+          <input required placeholder="WhatsApp" value={form.telefono} onChange={e => setForm({ ...form, telefono: e.target.value })} style={{ width: '100%', padding: 14, marginBottom: 14, border: '1.5px solid #E0E0E0', borderRadius: 10, fontSize: 15, boxSizing: 'border-box' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, background: '#F8F9FB', borderRadius: 12, marginBottom: 16 }}>
-            <button type="button" onClick={() => setCantidad(Math.max(1, cantidad - 1))} style={{ width: 44, height: 44, borderRadius: 10, border: '1.5px solid #042C53', background: 'white', color: '#042C53', fontSize: 22, fontWeight: 700, cursor: 'pointer' }}>−</button>
+            <button type="button" onClick={() => setCantidad(Math.max(1, cantidad - 1))} style={{ width: 44, height: 44, borderRadius: 10, border: '1.5px solid #042C53', background: 'white', color: '#042C53', fontSize: 22, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>−</button>
             <div style={{ flex: 1, textAlign: 'center' }}>
               <div style={{ fontSize: 32, fontWeight: 800, color: '#042C53' }}>{cantidad}</div>
               <div style={{ fontSize: 11, color: '#666', textTransform: 'uppercase' }}>quinielas</div>
             </div>
-            <button type="button" onClick={() => setCantidad(Math.min(20, cantidad + 1))} style={{ width: 44, height: 44, borderRadius: 10, border: '1.5px solid #042C53', background: 'white', color: '#042C53', fontSize: 22, fontWeight: 700, cursor: 'pointer' }}>+</button>
+            <button type="button" onClick={() => setCantidad(Math.min(20, cantidad + 1))} style={{ width: 44, height: 44, borderRadius: 10, border: '1.5px solid #042C53', background: 'white', color: '#042C53', fontSize: 22, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>+</button>
           </div>
-          <div style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', borderRadius: 14, padding: 22, marginBottom: 20, display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', borderRadius: 14, padding: isMobile ? 18 : 22, marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <div style={{ fontSize: 13 }}>Total a pagar</div>
               <div style={{ fontSize: 12, opacity: 0.7 }}>{cantidad} × ${COSTO.toLocaleString()}</div>
             </div>
-            <div style={{ fontSize: 36, fontWeight: 800, color: '#FAC775' }}>${total.toLocaleString()}</div>
+            <div style={{ fontSize: isMobile ? 28 : 36, fontWeight: 800, color: '#FAC775' }}>${total.toLocaleString()}</div>
           </div>
           <button type="submit" disabled={enviando} style={{ width: '100%', padding: 18, background: 'linear-gradient(135deg, #FAC775, #EF9F27)', color: '#412402', border: 'none', borderRadius: 12, fontSize: 16, fontWeight: 700, cursor: 'pointer' }}>
             {enviando ? 'Procesando...' : 'Continuar al pago →'}
@@ -234,10 +244,10 @@ export default function Home() {
 
       {exito && (
         <div onClick={() => setExito(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 500, width: '100%', padding: 40, textAlign: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 500, width: '100%', padding: isMobile ? 28 : 40, textAlign: 'center' }}>
             <div style={{ fontSize: 64, color: '#1D9E75', marginBottom: 16 }}>✓</div>
-            <h2 style={{ fontSize: 26, fontWeight: 800, color: '#042C53', marginBottom: 12 }}>Registro exitoso!</h2>
-            <p style={{ color: '#666', marginBottom: 24 }}>Ahora paga en MoneyPool. Cuando se confirme tu pago recibiras tu usuario y password por email.</p>
+            <h2 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: '#042C53', marginBottom: 12 }}>Registro exitoso!</h2>
+            <p style={{ color: '#666', marginBottom: 24, fontSize: isMobile ? 14 : 16 }}>Ahora paga en MoneyPool. Cuando se confirme tu pago recibiras tu usuario y password por email.</p>
             <a href={exito.linkMoneyPool} target="_blank" rel="noreferrer" style={{ display: 'block', padding: 16, background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', borderRadius: 12, textDecoration: 'none', fontWeight: 700, marginBottom: 12 }}>Pagar ${exito.monto.toLocaleString()} en MoneyPool</a>
             <button onClick={() => setExito(null)} style={{ padding: '10px 20px', background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer' }}>Cerrar</button>
           </div>
@@ -246,8 +256,8 @@ export default function Home() {
 
       {reglamento && (
         <div onClick={() => setReglamento(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 600, width: '100%', padding: 40, maxHeight: '90vh', overflowY: 'auto' }}>
-            <h2 style={{ fontSize: 26, fontWeight: 800, color: '#042C53', marginBottom: 8 }}>📖 Reglamento</h2>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 600, width: '100%', padding: isMobile ? 24 : 40, maxHeight: '90vh', overflowY: 'auto' }}>
+            <h2 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: '#042C53', marginBottom: 8 }}>📖 Reglamento</h2>
             <p style={{ color: '#666', marginBottom: 24 }}>Quiniela Mundial 2026</p>
 
             <h3 style={{ color: '#042C53', fontSize: 18, fontWeight: 800, marginTop: 20, marginBottom: 10 }}>💰 Inscripcion</h3>
