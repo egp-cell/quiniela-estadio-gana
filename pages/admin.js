@@ -5,6 +5,8 @@ export default function Admin() {
   const [tab, setTab] = useState('Pendiente_Pago');
   const [accesos, setAccesos] = useState(null);
   const [verAccesos, setVerAccesos] = useState(null);
+  const [aprobarModal, setAprobarModal] = useState(null);
+  const [cantidadAprobar, setCantidadAprobar] = useState(1);
   const [cargando, setCargando] = useState(true);
 
   async function cargar() {
@@ -22,15 +24,25 @@ export default function Admin() {
     return () => clearInterval(t);
   }, []);
 
-  async function aprobar(id) {
-    if (!confirm('Aprobar pago de este usuario?')) return;
+  function abrirAprobar(u) {
+    setAprobarModal(u);
+    setCantidadAprobar(u.cantidad_quinielas);
+  }
+
+  async function confirmarAprobar() {
+    if (!aprobarModal) return;
     const r = await fetch('/api/admin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ accion: 'aprobar', usuarioId: id })
+      body: JSON.stringify({
+        accion: 'aprobar',
+        usuarioId: aprobarModal.id,
+        cantidadAprobada: cantidadAprobar
+      })
     });
     const d = await r.json();
     if (d.exito) {
+      setAprobarModal(null);
       setAccesos(d);
       cargar();
     } else {
@@ -39,7 +51,7 @@ export default function Admin() {
   }
 
   async function rechazar(id) {
-    if (!confirm('Rechazar este pago?')) return;
+    if (!confirm('¿Rechazar este pago?')) return;
     const r = await fetch('/api/admin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -50,7 +62,7 @@ export default function Admin() {
   }
 
   async function eliminar(id, nombre) {
-    if (!confirm(`ELIMINAR PERMANENTEMENTE a ${nombre}?\n\nEsto borrara:\n- El usuario\n- Sus quinielas\n- Sus pronosticos\n- Sus pagos\n\nEsta accion NO se puede deshacer.`)) return;
+    if (!confirm(`ELIMINAR PERMANENTEMENTE a ${nombre}?\n\nEsto borrará:\n- El usuario\n- Sus quinielas\n- Sus pronósticos\n- Sus pagos\n\nEsta acción NO se puede deshacer.`)) return;
     const r = await fetch('/api/admin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -114,7 +126,7 @@ export default function Admin() {
           {cargando ? (
             <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>Cargando...</div>
           ) : filtrados.length === 0 ? (
-            <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>No hay usuarios en esta categoria</div>
+            <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>No hay usuarios en esta categoría</div>
           ) : (
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -138,7 +150,7 @@ export default function Admin() {
                     <td style={{ padding: 14, textAlign: 'right', whiteSpace: 'nowrap' }}>
                       {u.estado === 'Pendiente_Pago' && (
                         <>
-                          <button onClick={() => aprobar(u.id)} style={{ padding: '6px 12px', background: '#1D9E75', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginRight: 6, fontWeight: 600, fontSize: 12 }}>✓ Aprobar</button>
+                          <button onClick={() => abrirAprobar(u)} style={{ padding: '6px 12px', background: '#1D9E75', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginRight: 6, fontWeight: 600, fontSize: 12 }}>✓ Aprobar</button>
                           <button onClick={() => rechazar(u.id)} style={{ padding: '6px 12px', background: '#E04444', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginRight: 6, fontWeight: 600, fontSize: 12 }}>✕ Rechazar</button>
                         </>
                       )}
@@ -156,7 +168,44 @@ export default function Admin() {
           )}
         </div>
       </div>
-{verAccesos && (
+
+      {aprobarModal && (
+        <div onClick={() => setAprobarModal(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: 36 }}>
+            <div style={{ fontSize: 48, color: '#1D9E75', textAlign: 'center', marginBottom: 12 }}>✓</div>
+            <h2 style={{ fontSize: 22, fontWeight: 800, color: '#042C53', textAlign: 'center', marginBottom: 8 }}>Aprobar inscripción</h2>
+            <p style={{ color: '#666', textAlign: 'center', marginBottom: 8, fontSize: 14 }}>{aprobarModal.nombre} se inscribió con</p>
+            <p style={{ color: '#042C53', textAlign: 'center', marginBottom: 24, fontSize: 18, fontWeight: 800 }}>{aprobarModal.cantidad_quinielas} {aprobarModal.cantidad_quinielas === 1 ? 'quiniela' : 'quinielas'}</p>
+
+            <div style={{ background: '#F8F9FB', padding: 20, borderRadius: 14, marginBottom: 16 }}>
+              <div style={{ fontSize: 12, color: '#888', textTransform: 'uppercase', fontWeight: 600, marginBottom: 12, textAlign: 'center' }}>¿Cuántas pagó?</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <button onClick={() => setCantidadAprobar(Math.max(1, cantidadAprobar - 1))} style={{ width: 44, height: 44, borderRadius: 10, border: '1.5px solid #042C53', background: 'white', color: '#042C53', fontSize: 22, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>−</button>
+                <div style={{ flex: 1, textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#042C53' }}>{cantidadAprobar}</div>
+                  <div style={{ fontSize: 11, color: '#666', textTransform: 'uppercase' }}>quinielas</div>
+                </div>
+                <button onClick={() => setCantidadAprobar(Math.min(aprobarModal.cantidad_quinielas, cantidadAprobar + 1))} style={{ width: 44, height: 44, borderRadius: 10, border: '1.5px solid #042C53', background: 'white', color: '#042C53', fontSize: 22, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>+</button>
+              </div>
+              <div style={{ marginTop: 14, padding: 12, background: '#042C53', color: 'white', borderRadius: 10, textAlign: 'center' }}>
+                <div style={{ fontSize: 11, opacity: 0.7 }}>TOTAL COBRADO</div>
+                <div style={{ fontSize: 24, fontWeight: 800, color: '#FAC775' }}>${(cantidadAprobar * 3000).toLocaleString()}</div>
+              </div>
+            </div>
+
+            {cantidadAprobar < aprobarModal.cantidad_quinielas && (
+              <div style={{ padding: 12, background: '#FFF3E0', borderLeft: '3px solid #EF9F27', borderRadius: 6, marginBottom: 16, fontSize: 12, color: '#854F0B' }}>
+                ⚠️ Se aprobarán solo {cantidadAprobar} de {aprobarModal.cantidad_quinielas}. Las quinielas no pagadas no se crearán.
+              </div>
+            )}
+
+            <button onClick={confirmarAprobar} style={{ width: '100%', padding: 14, background: '#1D9E75', color: 'white', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer', marginBottom: 8, fontSize: 14 }}>✓ Aprobar {cantidadAprobar} {cantidadAprobar === 1 ? 'quiniela' : 'quinielas'}</button>
+            <button onClick={() => setAprobarModal(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cancelar</button>
+          </div>
+        </div>
+      )}
+
+      {verAccesos && (
         <div onClick={() => setVerAccesos(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: 36 }}>
             <div style={{ fontSize: 48, color: '#042C53', textAlign: 'center', marginBottom: 12 }}>🔑</div>
@@ -171,18 +220,20 @@ export default function Admin() {
             </div>
 
             {verAccesos.usuario && verAccesos.password && (
-              <a href={`https://wa.me/52${verAccesos.telefono}?text=${encodeURIComponent(`Hola ${verAccesos.nombre}! Aqui tus accesos para la Quiniela Mundial 2026:\n\nUsuario: ${verAccesos.usuario}\nPassword: ${verAccesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app/jugar`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Reenviar por WhatsApp</a>
+              <a href={`https://wa.me/52${verAccesos.telefono}?text=${encodeURIComponent(`Hola ${verAccesos.nombre}! Aquí tus accesos para la Quiniela Mundial 2026:\n\nUsuario: ${verAccesos.usuario}\nPassword: ${verAccesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app/jugar`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Reenviar por WhatsApp</a>
             )}
             <button onClick={() => setVerAccesos(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
           </div>
         </div>
       )}
+
       {accesos && (
         <div onClick={() => setAccesos(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: 36 }}>
             <div style={{ fontSize: 48, color: '#1D9E75', textAlign: 'center', marginBottom: 12 }}>✓</div>
             <h2 style={{ fontSize: 22, fontWeight: 800, color: '#042C53', textAlign: 'center', marginBottom: 8 }}>Pago aprobado</h2>
-            <p style={{ color: '#666', textAlign: 'center', marginBottom: 20 }}>Comparte estos accesos con {accesos.nombre} por WhatsApp</p>
+            <p style={{ color: '#666', textAlign: 'center', marginBottom: 8 }}>Comparte estos accesos con {accesos.nombre} por WhatsApp</p>
+            <p style={{ color: '#042C53', textAlign: 'center', marginBottom: 20, fontSize: 13, fontWeight: 700 }}>{accesos.cantidad} {accesos.cantidad === 1 ? 'quiniela' : 'quinielas'} · ${accesos.monto.toLocaleString()}</p>
 
             <div style={{ background: '#F8F9FB', padding: 18, borderRadius: 12, marginBottom: 16 }}>
               <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', fontWeight: 600 }}>Usuario</div>
@@ -191,7 +242,7 @@ export default function Admin() {
               <div style={{ fontSize: 18, fontWeight: 700, color: '#042C53', fontFamily: 'monospace' }}>{accesos.password}</div>
             </div>
 
-            <a href={`https://wa.me/52${accesos.telefono}?text=${encodeURIComponent(`Hola ${accesos.nombre}! Tu pago de la Quiniela Mundial 2026 fue confirmado. Tus accesos:\n\nUsuario: ${accesos.usuario}\nPassword: ${accesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app para hacer tus pronosticos. Suerte!`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Enviar por WhatsApp</a>
+            <a href={`https://wa.me/52${accesos.telefono}?text=${encodeURIComponent(`Hola ${accesos.nombre}! Tu pago de la Quiniela Mundial 2026 fue confirmado (${accesos.cantidad} ${accesos.cantidad === 1 ? 'quiniela' : 'quinielas'}). Tus accesos:\n\nUsuario: ${accesos.usuario}\nPassword: ${accesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app para hacer tus pronósticos. ¡Suerte!`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Enviar por WhatsApp</a>
             <button onClick={() => setAccesos(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
           </div>
         </div>
