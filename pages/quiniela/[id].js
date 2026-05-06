@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const BANDERAS = {
-  'Mexico': 'mx', 'Sudafrica': 'za', 'Corea del Sur': 'kr', 'Chequia': 'cz',
+  'México': 'mx', 'Sudáfrica': 'za', 'Corea del Sur': 'kr', 'Chequia': 'cz',
   'Canada': 'ca', 'Bosnia': 'ba', 'Catar': 'qa', 'Suiza': 'ch',
-  'Brasil': 'br', 'Marruecos': 'ma', 'Haiti': 'ht', 'Escocia': 'gb-sct',
-  'Estados Unidos': 'us', 'Paraguay': 'py', 'Australia': 'au', 'Turquia': 'tr',
+  'Brasil': 'br', 'Marruecos': 'ma', 'Haití': 'ht', 'Escocia': 'gb-sct',
+  'Estados Unidos': 'us', 'Paraguay': 'py', 'Australia': 'au', 'Turquía': 'tr',
   'Alemania': 'de', 'Curazao': 'cw', 'Costa de Marfil': 'ci', 'Ecuador': 'ec',
-  'Paises Bajos': 'nl', 'Japon': 'jp', 'Suecia': 'se', 'Tunez': 'tn',
-  'Belgica': 'be', 'Iran': 'ir', 'Egipto': 'eg', 'Nueva Zelanda': 'nz',
-  'Espana': 'es', 'Uruguay': 'uy', 'Arabia Saudita': 'sa', 'Cabo Verde': 'cv',
-  'Francia': 'fr', 'Senegal': 'sn', 'Noruega': 'no', 'Iraq': 'iq',
+  'Países Bajos': 'nl', 'Japón': 'jp', 'Suecia': 'se', 'Túnez': 'tn',
+  'Bélgica': 'be', 'Irán': 'ir', 'Egipto': 'eg', 'Nueva Zelanda': 'nz',
+  'España': 'es', 'Uruguay': 'uy', 'Arabia Saudita': 'sa', 'Cabo Verde': 'cv',
+  'Francia': 'fr', 'Senegal': 'sn', 'Noruega': 'no', 'Irak': 'iq',
   'Argentina': 'ar', 'Austria': 'at', 'Argelia': 'dz', 'Jordania': 'jo',
-  'Portugal': 'pt', 'Colombia': 'co', 'Uzbekistan': 'uz', 'RD Congo': 'cd',
-  'Inglaterra': 'gb-eng', 'Croacia': 'hr', 'Ghana': 'gh', 'Panama': 'pa'
+  'Portugal': 'pt', 'Colombia': 'co', 'Uzbekistán': 'uz', 'RD Congo': 'cd',
+  'Inglaterra': 'gb-eng', 'Croacia': 'hr', 'Ghana': 'gh', 'Panamá': 'pa'
 };
 
 export default function PronosticosQuiniela() {
