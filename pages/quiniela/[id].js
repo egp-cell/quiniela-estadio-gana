@@ -202,7 +202,7 @@ export default function PronosticosQuiniela() {
           <div>
            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <a href="/jugar" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>← Mis quinielas</a>
-              <a href="/tabla" style={{ padding: '6px 12px', background: '#FAC775', color: '#412402', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 12 }}>🏆 Tabla</a>
+             <a href="/tabla" style={{ padding: '10px 20px', background: '#FAC775', color: '#412402', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: 14, boxShadow: '0 3px 10px rgba(250,199,117,0.4)' }}>🏆 Ver Tabla</a>
             </div>
             <h1 style={{ fontSize: 22, fontWeight: 800, marginTop: 4 }}>{data.quiniela?.nombre || 'Quiniela'}</h1>
             <div style={{ fontSize: 13, opacity: 0.8, marginTop: 2 }}>
