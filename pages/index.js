@@ -81,6 +81,7 @@ export default function Home() {
 
       <div style={{ background: '#021A33', color: 'white', padding: '12px', display: 'flex', justifyContent: 'center', gap: 10, position: 'sticky', top: 0, zIndex: 50 }}>
         <button onClick={() => setReglamento(true)} style={{ padding: '8px 18px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>📖 Reglamento</button>
+        <a href="/jugar" style={{ padding: '8px 18px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 600, fontSize: 13 }}>🔐 Entrar</a>
         <a href="#registro" style={{ padding: '8px 18px', background: '#FAC775', color: '#412402', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13 }}>Inscribirme ahora</a>
       </div>
 
