@@ -1,114 +1,114 @@
 import { createClient } from '@supabase/supabase-js';
 
-function generarUsername(nombre, id) {
-  const limpio = nombre.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9 ]/g, '').trim().split(' ');
-  let base = limpio[0];
-  if (limpio.length > 1) base += '.' + limpio[limpio.length - 1];
-  return base + String(id).padStart(3, '0');
-}
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_KEY
+);
 
 function generarPassword() {
-  const m = 'abcdefghjkmnpqrstuvwxyz';
-  const M = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  const n = '23456789';
-  const s = '!@#$%';
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
   let p = '';
-  p += M.charAt(Math.floor(Math.random() * M.length));
-  p += m.charAt(Math.floor(Math.random() * m.length));
-  p += m.charAt(Math.floor(Math.random() * m.length));
-  p += n.charAt(Math.floor(Math.random() * n.length));
-  p += s.charAt(Math.floor(Math.random() * s.length));
-  p += m.charAt(Math.floor(Math.random() * m.length));
-  p += n.charAt(Math.floor(Math.random() * n.length));
-  p += M.charAt(Math.floor(Math.random() * M.length));
+  for (let i = 0; i < 8; i++) p += chars[Math.floor(Math.random() * chars.length)];
   return p;
 }
 
 export default async function handler(req, res) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_KEY
-  );
+  try {
+    if (req.method === 'GET') {
+      const { data: usuarios, error } = await supabase
+        .from('usuarios')
+        .select('*')
+        .order('fecha_registro', { ascending: false });
 
-  if (req.method === 'GET') {
-    const { data: usuarios, error } = await supabase
-      .from('usuarios')
-      .select('*')
-      .order('fecha_registro', { ascending: false });
+      if (error) return res.status(500).json({ exito: false, error: error.message });
 
-    if (error) return res.status(500).json({ error: error.message });
+      const stats = {
+        registrados: usuarios.length,
+        pendientes: usuarios.filter(u => u.estado === 'Pendiente_Pago').length,
+        activos: usuarios.filter(u => u.estado === 'Activo').length,
+        recaudado: usuarios.filter(u => u.estado === 'Activo').reduce((s, u) => s + (u.total_pagado || 0), 0)
+      };
 
-    let registrados = 0, pendientes = 0, activos = 0, recaudado = 0;
-    usuarios.forEach(u => {
-      registrados++;
-      if (u.estado === 'Activo') {
-        activos++;
-        recaudado += Number(u.total_pagado) || 0;
-      } else if (u.estado === 'Pendiente_Pago') {
-        pendientes++;
-      }
-    });
+      return res.status(200).json({ exito: true, stats, usuarios });
+    }
 
-    return res.status(200).json({
-      exito: true,
-      stats: { registrados, pendientes, activos, recaudado },
-      usuarios
-    });
-  }
+    if (req.method === 'POST') {
+      const { accion, usuarioId } = req.body;
 
-  if (req.method === 'POST') {
-    const { accion, id } = req.body;
+      if (accion === 'aprobar') {
+        const { data: usuario } = await supabase.from('usuarios').select('*').eq('id', usuarioId).single();
+        if (!usuario) return res.status(404).json({ exito: false, error: 'Usuario no encontrado' });
 
-    if (accion === 'aprobar') {
-      const { data: usuario } = await supabase
-        .from('usuarios').select('*').eq('id', id).single();
+        const username = usuario.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') + usuario.id;
+        const password = generarPassword();
+        const monto = usuario.cantidad_quinielas * 3000;
 
-      if (!usuario) return res.status(404).json({ error: 'No encontrado' });
-      if (usuario.estado === 'Activo') return res.status(400).json({ error: 'Ya activo' });
+        await supabase.from('usuarios').update({
+          estado: 'Activo',
+          usuario: username,
+          password: password,
+          total_pagado: monto,
+          fecha_aprobacion: new Date().toISOString()
+        }).eq('id', usuarioId);
 
-      const username = generarUsername(usuario.nombre, usuario.id);
-      const password = generarPassword();
-      const total = usuario.cantidad_quinielas * 3000;
+        await supabase.from('pagos').update({
+          estado: 'Confirmado',
+          fecha_confirmacion: new Date().toISOString()
+        }).eq('usuario_id', usuarioId);
 
-      await supabase.from('usuarios').update({
-        usuario: username,
-        password: password,
-        estado: 'Activo',
-        total_pagado: total,
-        fecha_aprobacion: new Date().toISOString()
-      }).eq('id', id);
+        // Crear las N quinielas
+        const quinielas = [];
+        for (let i = 1; i <= usuario.cantidad_quinielas; i++) {
+          quinielas.push({
+            usuario_id: usuarioId,
+            nombre: usuario.cantidad_quinielas > 1 ? `${usuario.nombre} #${i}` : usuario.nombre,
+            estado: 'Pagada',
+            puntos: 0
+          });
+        }
+        await supabase.from('quinielas').insert(quinielas);
 
-      const quinielas = [];
-      for (let i = 1; i <= usuario.cantidad_quinielas; i++) {
-        quinielas.push({
-          usuario_id: usuario.id,
-          nombre: usuario.cantidad_quinielas === 1 ? 'Mi quiniela' : 'Quiniela ' + i,
-          estado: 'Pagada'
+        return res.status(200).json({
+          exito: true,
+          nombre: usuario.nombre,
+          telefono: usuario.telefono,
+          usuario: username,
+          password: password
         });
       }
-      await supabase.from('quinielas').insert(quinielas);
 
-      await supabase.from('pagos').update({
-        estado: 'Aprobado',
-        fecha_confirmacion: new Date().toISOString()
-      }).eq('usuario_id', id).eq('estado', 'Pendiente');
+      if (accion === 'rechazar') {
+        await supabase.from('pagos').update({ estado: 'Rechazado' }).eq('usuario_id', usuarioId);
+        await supabase.from('usuarios').update({ estado: 'Rechazado' }).eq('id', usuarioId);
+        return res.status(200).json({ exito: true });
+      }
 
-      return res.status(200).json({
-        exito: true,
-        datos: { ...usuario, usuario: username, password, cantidad: usuario.cantidad_quinielas }
-      });
+      if (accion === 'eliminar') {
+        // Borrar en orden por las foreign keys
+        await supabase.from('puntuaciones').delete().eq('quiniela_id', usuarioId);
+        await supabase.from('pronosticos').delete().eq('quiniela_id', usuarioId);
+
+        // Obtener IDs de quinielas para borrar sus pronosticos/puntuaciones
+        const { data: quinielas } = await supabase.from('quinielas').select('id').eq('usuario_id', usuarioId);
+        if (quinielas && quinielas.length > 0) {
+          const quinielaIds = quinielas.map(q => q.id);
+          await supabase.from('puntuaciones').delete().in('quiniela_id', quinielaIds);
+          await supabase.from('pronosticos').delete().in('quiniela_id', quinielaIds);
+        }
+
+        await supabase.from('quinielas').delete().eq('usuario_id', usuarioId);
+        await supabase.from('pagos').delete().eq('usuario_id', usuarioId);
+        await supabase.from('usuarios').delete().eq('id', usuarioId);
+
+        return res.status(200).json({ exito: true });
+      }
+
+      return res.status(400).json({ exito: false, error: 'Accion no valida' });
     }
 
-    if (accion === 'rechazar') {
-      await supabase.from('usuarios').update({ estado: 'Rechazado' }).eq('id', id);
-      await supabase.from('pagos').update({ estado: 'Rechazado' }).eq('usuario_id', id);
-      return res.status(200).json({ exito: true });
-    }
-
-    return res.status(400).json({ error: 'Accion invalida' });
+    return res.status(405).json({ exito: false, error: 'Metodo no permitido' });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ exito: false, error: error.message });
   }
-
-  res.status(405).json({ error: 'Method not allowed' });
 }
