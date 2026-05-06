@@ -28,7 +28,8 @@ export default function Home() {
   const [reglamento, setReglamento] = useState(false);
   const [countdown, setCountdown] = useState({ d: 0, h: 0, m: 0, s: 0 });
   const [isMobile, setIsMobile] = useState(false);
-  const [grupoAbierto, setGrupoAbierto] = useState(null);
+ const [grupoAbierto, setGrupoAbierto] = useState(null);
+  const [tablaModal, setTablaModal] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -97,6 +98,7 @@ export default function Home() {
       <div style={{ background: '#021A33', color: 'white', padding: isMobile ? '10px 12px' : '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: isMobile ? 6 : 10, position: 'sticky', top: 0, zIndex: 50 }}>
         <div style={{ display: 'flex', gap: isMobile ? 6 : 10, flex: 1, justifyContent: isMobile ? 'flex-start' : 'center' }}>
           <button onClick={() => setReglamento(true)} style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>📖 {isMobile ? 'Reglas' : 'Reglamento'}</button>
+         <button onClick={() => setTablaModal(true)} style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>🏆 Tabla</button>
           <a href="#registro" style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: '#FAC775', color: '#412402', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>Inscribirme</a>
         </div>
         <a href="/jugar" style={{ padding: isMobile ? '8px 16px' : '12px 28px', background: '#1D9E75', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: isMobile ? 13 : 15, boxShadow: '0 4px 12px rgba(29,158,117,0.4)', whiteSpace: 'nowrap' }}>🔐 Log In</a>
@@ -205,54 +207,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section style={{ background: '#F8F9FB', padding: isMobile ? '50px 16px' : '60px 20px' }}>
-        <div style={{ maxWidth: 700, margin: '0 auto' }}>
-          <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', marginBottom: 8, color: '#042C53' }}>🏆 Top 5</h2>
-          <p style={{ textAlign: 'center', color: '#666', fontSize: 14, marginBottom: isMobile ? 24 : 32 }}>Los líderes de la quiniela en este momento</p>
-
-          {topRanking.length === 0 ? (
-            <div style={{ background: 'white', borderRadius: 20, padding: 40, textAlign: 'center', border: '1px solid #E0E0E0' }}>
-              <div style={{ fontSize: 48, marginBottom: 12 }}>⚽</div>
-              <div style={{ fontWeight: 700, color: '#042C53', fontSize: 16, marginBottom: 8 }}>Aún no hay líderes</div>
-              <div style={{ fontSize: 13, color: '#666' }}>Cuando empiece el Mundial y se capturen los primeros resultados, aquí verás el ranking en vivo.</div>
-            </div>
-          ) : (
-            <>
-              <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', border: '1px solid #E0E0E0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '50px 1fr 60px' : '60px 1fr 80px', padding: isMobile ? '12px 14px' : '14px 20px', background: '#F8F9FB', fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
-                  <div style={{ textAlign: 'center' }}>Pos</div>
-                  <div>Quiniela</div>
-                  <div style={{ textAlign: 'center' }}>Pts</div>
-                </div>
-                {topRanking.map(q => {
-                  const colores = q.posicion === 1 ? { bg: 'linear-gradient(135deg, #FFD700, #FFA500)', txt: 'white', emoji: '🥇' }
-                                : q.posicion === 2 ? { bg: 'linear-gradient(135deg, #C0C0C0, #A8A8A8)', txt: 'white', emoji: '🥈' }
-                                : q.posicion === 3 ? { bg: 'linear-gradient(135deg, #CD7F32, #A0522D)', txt: 'white', emoji: '🥉' }
-                                : { bg: '#F0F2F5', txt: '#666', emoji: '' };
-                  return (
-                    <div key={q.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '50px 1fr 60px' : '60px 1fr 80px', padding: isMobile ? '14px 14px' : '16px 20px', borderBottom: '1px solid #F0F2F5', alignItems: 'center' }}>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? 32 : 38, height: isMobile ? 32 : 38, borderRadius: '50%', background: colores.bg, color: colores.txt, fontWeight: 800, fontSize: isMobile ? 11 : 13 }}>
-                          {colores.emoji || `#${q.posicion}`}
-                        </div>
-                      </div>
-                      <div>
-                        <div style={{ fontWeight: 700, color: '#042C53', fontSize: isMobile ? 13 : 15 }}>{q.nombreQuiniela}</div>
-                        <div style={{ fontSize: isMobile ? 11 : 12, color: '#888' }}>{q.nombreUsuario}</div>
-                      </div>
-                      <div style={{ textAlign: 'center', fontSize: isMobile ? 18 : 22, fontWeight: 900, color: '#042C53' }}>{q.puntos}</div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div style={{ textAlign: 'center', marginTop: 24 }}>
-                <a href="/tabla" style={{ display: 'inline-block', padding: '12px 24px', background: '#042C53', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14 }}>Ver tabla completa →</a>
-              </div>
-            </>
-          )}
-        </div>
-      </section>
-
+    
       <section id="registro" style={{ padding: isMobile ? '60px 16px' : '80px 20px', background: 'white' }}>
         <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', color: '#042C53', marginBottom: isMobile ? 28 : 40 }}>Inscríbete</h2>
         <form onSubmit={enviarForm} style={{ maxWidth: 600, margin: '0 auto', background: 'white', padding: isMobile ? 24 : 40, borderRadius: 24, border: '1px solid #E0E0E0' }}>
@@ -291,7 +246,53 @@ export default function Home() {
           </div>
         </div>
       )}
+{tablaModal && (
+        <div onClick={() => setTablaModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 700, width: '100%', padding: isMobile ? 24 : 40, maxHeight: '90vh', overflowY: 'auto' }}>
+            <h2 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: '#042C53', marginBottom: 4 }}>🏆 Tabla de Líderes</h2>
+            <p style={{ color: '#666', marginBottom: 20, fontSize: 13 }}>{topRanking.length > 0 ? `Mostrando los primeros 5 de ${stats.totalQuinielas} quinielas` : 'Aún no hay líderes'}</p>
 
+            {topRanking.length === 0 ? (
+              <div style={{ background: '#F8F9FB', borderRadius: 14, padding: 40, textAlign: 'center', border: '1px solid #E0E0E0', marginBottom: 16 }}>
+                <div style={{ fontSize: 48, marginBottom: 12 }}>⚽</div>
+                <div style={{ fontWeight: 700, color: '#042C53', fontSize: 16, marginBottom: 8 }}>Aún no hay líderes</div>
+                <div style={{ fontSize: 13, color: '#666' }}>Cuando empiece el Mundial y se capturen los primeros resultados, aquí verás el ranking en vivo.</div>
+              </div>
+            ) : (
+              <div style={{ background: '#F8F9FB', borderRadius: 14, overflow: 'hidden', border: '1px solid #E0E0E0', marginBottom: 16 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '50px 1fr 60px', padding: '12px 14px', background: 'white', fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
+                  <div style={{ textAlign: 'center' }}>Pos</div>
+                  <div>Quiniela</div>
+                  <div style={{ textAlign: 'center' }}>Pts</div>
+                </div>
+                {topRanking.map(q => {
+                  const colores = q.posicion === 1 ? { bg: 'linear-gradient(135deg, #FFD700, #FFA500)', txt: 'white', emoji: '🥇' }
+                                : q.posicion === 2 ? { bg: 'linear-gradient(135deg, #C0C0C0, #A8A8A8)', txt: 'white', emoji: '🥈' }
+                                : q.posicion === 3 ? { bg: 'linear-gradient(135deg, #CD7F32, #A0522D)', txt: 'white', emoji: '🥉' }
+                                : { bg: '#E0E0E0', txt: '#666', emoji: '' };
+                  return (
+                    <div key={q.id} style={{ display: 'grid', gridTemplateColumns: '50px 1fr 60px', padding: '14px', borderBottom: '1px solid #E8E8E8', alignItems: 'center', background: 'white' }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '50%', background: colores.bg, color: colores.txt, fontWeight: 800, fontSize: 12 }}>
+                          {colores.emoji || `#${q.posicion}`}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 700, color: '#042C53', fontSize: 13 }}>{q.nombreQuiniela}</div>
+                        <div style={{ fontSize: 11, color: '#888' }}>{q.nombreUsuario}</div>
+                      </div>
+                      <div style={{ textAlign: 'center', fontSize: 18, fontWeight: 900, color: '#042C53' }}>{q.puntos}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <a href="/tabla" style={{ display: 'block', padding: 14, background: '#042C53', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 10 }}>Ver tabla completa →</a>
+            <button onClick={() => setTablaModal(false)} style={{ width: '100%', padding: 14, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>Cerrar</button>
+          </div>
+        </div>
+      )}
       {reglamento && (
         <div onClick={() => setReglamento(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 600, width: '100%', padding: isMobile ? 24 : 40, maxHeight: '90vh', overflowY: 'auto' }}>
