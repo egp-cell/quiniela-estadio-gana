@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 
 const COSTO = 3000;
+const WHATSAPP_ORGANIZADOR = '525569161882';
+
 const GRUPOS = {
   'A':[{n:'México',c:'mx'},{n:'Sudáfrica',c:'za'},{n:'Corea del Sur',c:'kr'},{n:'Chequia',c:'cz'}],
   'B':[{n:'Canada',c:'ca'},{n:'Bosnia',c:'ba'},{n:'Catar',c:'qa'},{n:'Suiza',c:'ch'}],
@@ -203,44 +205,53 @@ export default function Home() {
         </div>
       </section>
 
-      {topRanking.length > 0 && (
-        <section style={{ background: '#F8F9FB', padding: isMobile ? '50px 16px' : '60px 20px' }}>
-          <div style={{ maxWidth: 700, margin: '0 auto' }}>
-            <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', marginBottom: 8, color: '#042C53' }}>🏆 Top 5</h2>
-            <p style={{ textAlign: 'center', color: '#666', fontSize: 14, marginBottom: isMobile ? 24 : 32 }}>Los líderes de la quiniela en este momento</p>
-            <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', border: '1px solid #E0E0E0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '50px 1fr 60px' : '60px 1fr 80px', padding: isMobile ? '12px 14px' : '14px 20px', background: '#F8F9FB', fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
-                <div style={{ textAlign: 'center' }}>Pos</div>
-                <div>Quiniela</div>
-                <div style={{ textAlign: 'center' }}>Pts</div>
-              </div>
-              {topRanking.map(q => {
-                const colores = q.posicion === 1 ? { bg: 'linear-gradient(135deg, #FFD700, #FFA500)', txt: 'white', emoji: '🥇' }
-                              : q.posicion === 2 ? { bg: 'linear-gradient(135deg, #C0C0C0, #A8A8A8)', txt: 'white', emoji: '🥈' }
-                              : q.posicion === 3 ? { bg: 'linear-gradient(135deg, #CD7F32, #A0522D)', txt: 'white', emoji: '🥉' }
-                              : { bg: '#F0F2F5', txt: '#666', emoji: '' };
-                return (
-                  <div key={q.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '50px 1fr 60px' : '60px 1fr 80px', padding: isMobile ? '14px 14px' : '16px 20px', borderBottom: '1px solid #F0F2F5', alignItems: 'center' }}>
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? 32 : 38, height: isMobile ? 32 : 38, borderRadius: '50%', background: colores.bg, color: colores.txt, fontWeight: 800, fontSize: isMobile ? 11 : 13 }}>
-                        {colores.emoji || `#${q.posicion}`}
+      <section style={{ background: '#F8F9FB', padding: isMobile ? '50px 16px' : '60px 20px' }}>
+        <div style={{ maxWidth: 700, margin: '0 auto' }}>
+          <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', marginBottom: 8, color: '#042C53' }}>🏆 Top 5</h2>
+          <p style={{ textAlign: 'center', color: '#666', fontSize: 14, marginBottom: isMobile ? 24 : 32 }}>Los líderes de la quiniela en este momento</p>
+
+          {topRanking.length === 0 ? (
+            <div style={{ background: 'white', borderRadius: 20, padding: 40, textAlign: 'center', border: '1px solid #E0E0E0' }}>
+              <div style={{ fontSize: 48, marginBottom: 12 }}>⚽</div>
+              <div style={{ fontWeight: 700, color: '#042C53', fontSize: 16, marginBottom: 8 }}>Aún no hay líderes</div>
+              <div style={{ fontSize: 13, color: '#666' }}>Cuando empiece el Mundial y se capturen los primeros resultados, aquí verás el ranking en vivo.</div>
+            </div>
+          ) : (
+            <>
+              <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', border: '1px solid #E0E0E0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '50px 1fr 60px' : '60px 1fr 80px', padding: isMobile ? '12px 14px' : '14px 20px', background: '#F8F9FB', fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
+                  <div style={{ textAlign: 'center' }}>Pos</div>
+                  <div>Quiniela</div>
+                  <div style={{ textAlign: 'center' }}>Pts</div>
+                </div>
+                {topRanking.map(q => {
+                  const colores = q.posicion === 1 ? { bg: 'linear-gradient(135deg, #FFD700, #FFA500)', txt: 'white', emoji: '🥇' }
+                                : q.posicion === 2 ? { bg: 'linear-gradient(135deg, #C0C0C0, #A8A8A8)', txt: 'white', emoji: '🥈' }
+                                : q.posicion === 3 ? { bg: 'linear-gradient(135deg, #CD7F32, #A0522D)', txt: 'white', emoji: '🥉' }
+                                : { bg: '#F0F2F5', txt: '#666', emoji: '' };
+                  return (
+                    <div key={q.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '50px 1fr 60px' : '60px 1fr 80px', padding: isMobile ? '14px 14px' : '16px 20px', borderBottom: '1px solid #F0F2F5', alignItems: 'center' }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? 32 : 38, height: isMobile ? 32 : 38, borderRadius: '50%', background: colores.bg, color: colores.txt, fontWeight: 800, fontSize: isMobile ? 11 : 13 }}>
+                          {colores.emoji || `#${q.posicion}`}
+                        </div>
                       </div>
+                      <div>
+                        <div style={{ fontWeight: 700, color: '#042C53', fontSize: isMobile ? 13 : 15 }}>{q.nombreQuiniela}</div>
+                        <div style={{ fontSize: isMobile ? 11 : 12, color: '#888' }}>{q.nombreUsuario}</div>
+                      </div>
+                      <div style={{ textAlign: 'center', fontSize: isMobile ? 18 : 22, fontWeight: 900, color: '#042C53' }}>{q.puntos}</div>
                     </div>
-                    <div>
-                      <div style={{ fontWeight: 700, color: '#042C53', fontSize: isMobile ? 13 : 15 }}>{q.nombreQuiniela}</div>
-                      <div style={{ fontSize: isMobile ? 11 : 12, color: '#888' }}>{q.nombreUsuario}</div>
-                    </div>
-                    <div style={{ textAlign: 'center', fontSize: isMobile ? 18 : 22, fontWeight: 900, color: '#042C53' }}>{q.puntos}</div>
-                  </div>
-                );
-              })}
-            </div>
-            <div style={{ textAlign: 'center', marginTop: 24 }}>
-              <a href="/tabla" style={{ display: 'inline-block', padding: '12px 24px', background: '#042C53', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14 }}>Ver tabla completa →</a>
-            </div>
-          </div>
-        </section>
-      )}
+                  );
+                })}
+              </div>
+              <div style={{ textAlign: 'center', marginTop: 24 }}>
+                <a href="/tabla" style={{ display: 'inline-block', padding: '12px 24px', background: '#042C53', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14 }}>Ver tabla completa →</a>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
 
       <section id="registro" style={{ padding: isMobile ? '60px 16px' : '80px 20px', background: 'white' }}>
         <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', color: '#042C53', marginBottom: isMobile ? 28 : 40 }}>Inscríbete</h2>
@@ -284,44 +295,88 @@ export default function Home() {
       {reglamento && (
         <div onClick={() => setReglamento(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 600, width: '100%', padding: isMobile ? 24 : 40, maxHeight: '90vh', overflowY: 'auto' }}>
-            <h2 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: '#042C53', marginBottom: 8 }}>📖 Reglamento</h2>
-            <p style={{ color: '#666', marginBottom: 24 }}>Quiniela Mundial 2026</p>
+            <h2 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: '#042C53', marginBottom: 4 }}>📖 Reglamento</h2>
+            <p style={{ color: '#666', marginBottom: 24, fontSize: 13 }}>Quiniela Mundial 2026 · Lee bien antes de inscribirte</p>
 
-            <h3 style={{ color: '#042C53', fontSize: 18, fontWeight: 800, marginTop: 20, marginBottom: 10 }}>💰 Inscripción</h3>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}><b>Costo:</b> $3,000 MXN por quiniela</li>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}><b>Quinielas por persona:</b> ilimitadas</li>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}><b>Pago:</b> MoneyPool</li>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}><b>Cierre:</b> 10 de junio 2026</li>
+            <h3 style={{ color: '#042C53', fontSize: 17, fontWeight: 800, marginTop: 20, marginBottom: 10 }}>💰 Inscripción</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Costo:</b> $3,000 MXN por quiniela</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Quinielas por persona:</b> ilimitadas (puedes meter varias y aumentas tus chances)</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Pago:</b> únicamente vía MoneyPool (recibirás el link al inscribirte)</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Confirmación:</b> el organizador valida tu pago y te envía usuario y password por WhatsApp</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Cierre de inscripciones:</b> 10 de junio 2026 (un día antes del partido inaugural)</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Inscripciones tardías:</b> aceptadas durante el torneo, pero solo cuentan los partidos que aún no hayan iniciado</li>
             </ul>
 
-            <h3 style={{ color: '#042C53', fontSize: 18, fontWeight: 800, marginTop: 20, marginBottom: 10 }}>🎯 Puntuación</h3>
+            <h3 style={{ color: '#042C53', fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>🎯 Sistema de puntos</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
               <div style={{ padding: 14, background: '#FAEEDA', borderRadius: 10, textAlign: 'center' }}>
                 <div style={{ fontSize: 26, fontWeight: 800, color: '#854F0B' }}>3 pts</div>
-                <div style={{ fontSize: 11, color: '#633806', textTransform: 'uppercase', fontWeight: 600 }}>Acertar ganador / empate</div>
+                <div style={{ fontSize: 11, color: '#633806', textTransform: 'uppercase', fontWeight: 600 }}>Acertar ganador o empate</div>
               </div>
               <div style={{ padding: 14, background: '#FAEEDA', borderRadius: 10, textAlign: 'center' }}>
                 <div style={{ fontSize: 26, fontWeight: 800, color: '#854F0B' }}>5 pts</div>
                 <div style={{ fontSize: 11, color: '#633806', textTransform: 'uppercase', fontWeight: 600 }}>Marcador exacto</div>
               </div>
             </div>
-            <p style={{ fontSize: 12, color: '#888', marginBottom: 12 }}>Solo cuenta el resultado al min 90.</p>
-
-            <h3 style={{ color: '#042C53', fontSize: 18, fontWeight: 800, marginTop: 20, marginBottom: 10 }}>🏆 Premios</h3>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}><b>1er lugar:</b> 56% de la bolsa</li>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}><b>2do lugar:</b> 23% de la bolsa</li>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}><b>3er lugar:</b> 14% de la bolsa</li>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}><b>Comisión organizador:</b> 7%</li>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Resultado válido:</b> únicamente el marcador al minuto 90 (no cuenta tiempo extra ni penales)</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Marcador exacto incluye los 3 pts:</b> aciertas marcador exacto = 5 pts (no se suman aparte)</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Cálculo:</b> los puntos se calculan automáticamente al capturarse el resultado oficial</li>
             </ul>
 
-            <h3 style={{ color: '#042C53', fontSize: 18, fontWeight: 800, marginTop: 20, marginBottom: 10 }}>⚖️ Empates</h3>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}>1. Más marcadores exactos</li>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}>2. Más aciertos en eliminatorias</li>
-              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 14 }}>3. Reparto en partes iguales</li>
+            <h3 style={{ color: '#042C53', fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>⚽ Pronósticos</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Cuándo pronosticar:</b> en cualquier momento antes del inicio de cada partido</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Modificaciones:</b> puedes editar tu pronóstico hasta el minuto en que arranca el partido</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Bloqueo automático:</b> al iniciar cada partido, el pronóstico se cierra y ya no se puede cambiar</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Auto-guardado:</b> tus pronósticos se guardan solos cuando llenas ambos marcadores</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Eliminatorias:</b> los partidos de fase final se desbloquean cuando se conozcan los equipos clasificados</li>
             </ul>
+
+            <h3 style={{ color: '#042C53', fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>🏆 Premios</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>1er lugar:</b> 56% de la bolsa total</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>2do lugar:</b> 23% de la bolsa total</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>3er lugar:</b> 14% de la bolsa total</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Comisión organizador:</b> 7% (cubre operación y mantenimiento de la plataforma)</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Pago de premios:</b> tras la final del Mundial. El organizador notificará a los ganadores por WhatsApp para coordinar la transferencia</li>
+            </ul>
+
+            <h3 style={{ color: '#042C53', fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>⚖️ Empates en el ranking</h3>
+            <p style={{ fontSize: 13, color: '#444', marginBottom: 10 }}>Si dos o más quinielas terminan con el mismo total de puntos, se desempata así:</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>1.</b> Más marcadores exactos durante todo el torneo</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>2.</b> Más aciertos en partidos de eliminatoria</li>
+              <li style={{ padding: '8px 12px', background: '#F8F9FB', borderLeft: '3px solid #042C53', borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>3.</b> Si persiste el empate, el premio se reparte en partes iguales</li>
+            </ul>
+
+            <h3 style={{ color: '#042C53', fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>❓ Preguntas frecuentes</h3>
+            <div style={{ background: '#F8F9FB', padding: 14, borderRadius: 10, marginBottom: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#042C53', marginBottom: 4 }}>¿Qué pasa si un partido se cancela o se aplaza?</div>
+              <div style={{ fontSize: 13, color: '#555' }}>Si la FIFA cancela un partido, se anula del cálculo de puntos. Si se reprograma, los pronósticos siguen vigentes para la nueva fecha.</div>
+            </div>
+            <div style={{ background: '#F8F9FB', padding: 14, borderRadius: 10, marginBottom: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#042C53', marginBottom: 4 }}>¿Puedo registrar varias quinielas con nombres distintos?</div>
+              <div style={{ fontSize: 13, color: '#555' }}>Sí. Puedes inscribir 2, 3 o las que quieras y cada una compite por separado. Aumentas tus chances de ganar.</div>
+            </div>
+            <div style={{ background: '#F8F9FB', padding: 14, borderRadius: 10, marginBottom: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#042C53', marginBottom: 4 }}>¿Qué pasa si no pronostico un partido?</div>
+              <div style={{ fontSize: 13, color: '#555' }}>Ese partido te da 0 puntos. No hay penalización extra, simplemente pierdes la oportunidad de sumar.</div>
+            </div>
+            <div style={{ background: '#F8F9FB', padding: 14, borderRadius: 10, marginBottom: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#042C53', marginBottom: 4 }}>¿Puedo cambiar mi pronóstico después?</div>
+              <div style={{ fontSize: 13, color: '#555' }}>Sí, hasta el momento exacto en que comienza el partido. Después se bloquea automáticamente.</div>
+            </div>
+            <div style={{ background: '#F8F9FB', padding: 14, borderRadius: 10, marginBottom: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#042C53', marginBottom: 4 }}>¿Cómo se garantiza que nadie pueda hacer trampa?</div>
+              <div style={{ fontSize: 13, color: '#555' }}>El sistema bloquea cualquier modificación al iniciar el partido y todos los movimientos quedan registrados con fecha y hora.</div>
+            </div>
+
+            <h3 style={{ color: '#042C53', fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>📞 Contacto</h3>
+            <p style={{ fontSize: 13, color: '#444', marginBottom: 10 }}>Para cualquier duda, problema con tu inscripción o pago, contacta al organizador:</p>
+            <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}?text=${encodeURIComponent('Hola Emiliano, tengo una duda sobre la Quiniela Mundial 2026:')}`} target="_blank" rel="noreferrer" style={{ display: 'block', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 8 }}>📱 Contactar por WhatsApp</a>
+            <p style={{ fontSize: 11, color: '#888', textAlign: 'center' }}>Emiliano · +52 55 6916 1882</p>
 
             <button onClick={() => setReglamento(false)} style={{ marginTop: 24, width: '100%', padding: 14, background: '#042C53', color: 'white', border: 'none', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>Cerrar</button>
           </div>
@@ -330,7 +385,8 @@ export default function Home() {
 
       <footer style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', padding: '40px 20px', textAlign: 'center' }}>
         <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026</div>
-        <p style={{ fontSize: 11, opacity: 0.5, marginTop: 12 }}>Sitio no afiliado a la FIFA. Quiniela privada.</p>
+        <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}`} target="_blank" rel="noreferrer" style={{ display: 'inline-block', marginTop: 16, padding: '8px 16px', background: 'rgba(255,255,255,0.1)', color: 'white', borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>📱 Contactar al organizador</a>
+        <p style={{ fontSize: 11, opacity: 0.5, marginTop: 16 }}>Sitio no afiliado a la FIFA. Quiniela privada.</p>
       </footer>
     </div>
   );
