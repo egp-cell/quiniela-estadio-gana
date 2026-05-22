@@ -27,6 +27,14 @@ export default function PronosticosQuiniela() {
   const [guardando, setGuardando] = useState({});
   const [pronosticos, setPronosticos] = useState({});
   const [logueado, setLogueado] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     const sesion = sessionStorage.getItem('quiniela_sesion');
@@ -200,8 +208,8 @@ export default function PronosticosQuiniela() {
 
       <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-          <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '4px 8px', borderRadius: 6, textDecoration: 'none', flexShrink: 0 }}>
-            <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 32, width: 'auto', display: 'block' }} />
+          <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
+            <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
           </a>
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
@@ -355,7 +363,7 @@ export default function PronosticosQuiniela() {
           <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
         </div>
         <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
-        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026</div>
+        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026 · Estadio Gana</div>
       </footer>
     </div>
   );

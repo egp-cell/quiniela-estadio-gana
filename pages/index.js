@@ -97,8 +97,8 @@ export default function Home() {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
       <div style={{ background: COLORS.primario, color: 'white', padding: isMobile ? '10px 12px' : '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: isMobile ? 6 : 10, position: 'sticky', top: 0, zIndex: 50 }}>
-        <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '4px 8px', borderRadius: 6, textDecoration: 'none', flexShrink: 0 }}>
-          <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 26 : 32, width: 'auto', display: 'block' }} />
+        <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
+          <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
         </a>
         <div style={{ display: 'flex', gap: isMobile ? 6 : 10, flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
           <button onClick={() => setReglamento(true)} style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>📖 {isMobile ? 'Reglas' : 'Reglamento'}</button>
@@ -221,7 +221,7 @@ export default function Home() {
           <p style={{ fontSize: isMobile ? 14 : 16, color: '#555', maxWidth: 640, margin: '0 auto 24px' }}>
             Gracias a {SPONSOR.nombre}, patrocinador oficial de la Quiniela Mundial 2026, la bolsa se incrementa con un aporte directo para los ganadores. ¡Conócelos!
           </p>
-          <a href={SPONSOR.url} style={{ display: 'inline-block', padding: '14px 28px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 15 }}>Visitar {SPONSOR.nombre} →</a>
+          <a href={SPONSOR.url} target="_blank" rel="noreferrer noopener" style={{ display: 'inline-block', padding: '14px 28px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 15 }}>Visitar {SPONSOR.nombre} →</a>
         </div>
       </section>
 
@@ -314,7 +314,7 @@ export default function Home() {
         <div onClick={() => setReglamento(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 600, width: '100%', padding: isMobile ? 24 : 40, maxHeight: '90vh', overflowY: 'auto' }}>
             <h2 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: COLORS.azulDetalle, marginBottom: 4 }}>📖 Reglamento</h2>
-            <p style={{ color: '#666', marginBottom: 24, fontSize: 13 }}>Quiniela Mundial 2026 · Lee bien antes de inscribirte</p>
+            <p style={{ color: '#666', marginBottom: 24, fontSize: 13 }}>Quiniela Mundial 2026 · Estadio Gana · Lee bien antes de inscribirte</p>
 
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 20, marginBottom: 10 }}>💰 Inscripción</h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -393,7 +393,7 @@ export default function Home() {
 
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>📞 Contacto</h3>
             <p style={{ fontSize: 13, color: '#444', marginBottom: 10 }}>Para cualquier duda, problema con tu inscripción o pago, contacta al organizador:</p>
-            <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}?text=${encodeURIComponent('Hola Emiliano, tengo una duda sobre la Quiniela Mundial 2026:')}`} target="_blank" rel="noreferrer" style={{ display: 'block', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 8 }}>📱 Contactar por WhatsApp</a>
+            <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}?text=${encodeURIComponent('Hola Emiliano, tengo una duda sobre la Quiniela Mundial 2026 · Estadio Gana:')}`} target="_blank" rel="noreferrer" style={{ display: 'block', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 8 }}>📱 Contactar por WhatsApp</a>
             <p style={{ fontSize: 11, color: '#888', textAlign: 'center' }}>Emiliano · +52 55 6916 1882</p>
 
             <button onClick={() => setReglamento(false)} style={{ marginTop: 24, width: '100%', padding: 14, background: COLORS.primario, color: 'white', border: 'none', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>Cerrar</button>
@@ -406,7 +406,7 @@ export default function Home() {
           <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
         </div>
         <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
-        <div style={{ fontWeight: 700, marginBottom: 12 }}>⚽ Quiniela Mundial 2026</div>
+        <div style={{ fontWeight: 700, marginBottom: 12 }}>⚽ Quiniela Mundial 2026 · Estadio Gana</div>
         <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}`} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '8px 16px', background: 'rgba(255,255,255,0.15)', color: 'white', borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>📱 Contactar al organizador</a>
         <p style={{ fontSize: 11, opacity: 0.6, marginTop: 16 }}>Sitio no afiliado a la FIFA. Quiniela privada.</p>
       </footer>

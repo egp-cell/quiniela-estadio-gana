@@ -9,6 +9,14 @@ export default function Jugar() {
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
   const [logueado, setLogueado] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // Auto-login si ya hay sesión guardada
   useEffect(() => {
@@ -60,8 +68,8 @@ export default function Jugar() {
 
         <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-            <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '4px 8px', borderRadius: 6, textDecoration: 'none', flexShrink: 0 }}>
-              <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 32, width: 'auto', display: 'block' }} />
+            <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
+              <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
             </a>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 12, opacity: 0.85, letterSpacing: 1 }}>HOLA</div>
@@ -107,7 +115,7 @@ export default function Jugar() {
             <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
           </div>
           <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
-          <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026</div>
+          <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026 · Estadio Gana</div>
         </footer>
       </div>
     );
@@ -128,7 +136,7 @@ export default function Jugar() {
           </div>
 
           <div style={{ textAlign: 'center', marginBottom: 26, paddingTop: 18, borderTop: '1px solid #F0F2F5' }}>
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: COLORS.azulDetalle }}>Quiniela Mundial 2026</h1>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: COLORS.azulDetalle }}>Quiniela Mundial 2026 · Estadio Gana</h1>
             <p style={{ color: '#666', fontSize: 14, marginTop: 4 }}>Ingresa con tus accesos</p>
           </div>
 
@@ -175,7 +183,7 @@ export default function Jugar() {
       </div>
 
       <footer style={{ color: 'rgba(255,255,255,0.85)', padding: '20px', textAlign: 'center', fontSize: 12 }}>
-        Patrocinador oficial · {SPONSOR.nombre} · ⚽ Quiniela Mundial 2026
+        Patrocinador oficial · {SPONSOR.nombre} · ⚽ Quiniela Mundial 2026 · Estadio Gana
       </footer>
     </div>
   );

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { SPONSOR } from '../../lib/brand';
 
 export default async function handler(req, res) {
   const supabase = createClient(
@@ -17,6 +18,6 @@ export default async function handler(req, res) {
 
   return res.status(200).json({
     totalQuinielas: total,
-    bolsa: total * 3000
+    bolsa: total * 3000 + SPONSOR.aporteBolsa
   });
 }

@@ -9,6 +9,14 @@ export default function Admin() {
   const [aprobarModal, setAprobarModal] = useState(null);
   const [cantidadAprobar, setCantidadAprobar] = useState(1);
   const [cargando, setCargando] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   async function cargar() {
     try {
@@ -86,10 +94,10 @@ export default function Admin() {
 
       <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-          <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '4px 8px', borderRadius: 6, textDecoration: 'none', flexShrink: 0 }}>
-            <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 32, width: 'auto', display: 'block' }} />
+          <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
+            <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
           </a>
-          <h1 style={{ fontSize: 22, fontWeight: 800, flex: 1 }}>⚙️ Panel Admin · Quiniela Mundial 2026</h1>
+          <h1 style={{ fontSize: 22, fontWeight: 800, flex: 1 }}>⚙️ Panel Admin · Quiniela Mundial 2026 · Estadio Gana</h1>
           <div style={{ display: 'flex', gap: 8 }}>
             <a href="/admin/resultados" style={{ padding: '8px 16px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13 }}>⚽ Capturar resultados</a>
             <button onClick={cargar} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>🔄 Refrescar</button>
@@ -224,7 +232,7 @@ export default function Admin() {
             </div>
 
             {verAccesos.usuario && verAccesos.password && (
-              <a href={`https://wa.me/52${verAccesos.telefono}?text=${encodeURIComponent(`Hola ${verAccesos.nombre}! Aquí tus accesos para la Quiniela Mundial 2026:\n\nUsuario: ${verAccesos.usuario}\nPassword: ${verAccesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app/jugar`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Reenviar por WhatsApp</a>
+              <a href={`https://wa.me/52${verAccesos.telefono}?text=${encodeURIComponent(`Hola ${verAccesos.nombre}! Aquí tus accesos para la Quiniela Mundial 2026 · Estadio Gana:\n\nUsuario: ${verAccesos.usuario}\nPassword: ${verAccesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app/jugar`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Reenviar por WhatsApp</a>
             )}
             <button onClick={() => setVerAccesos(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
           </div>
@@ -246,7 +254,7 @@ export default function Admin() {
               <div style={{ fontSize: 18, fontWeight: 700, color: COLORS.azulDetalle, fontFamily: 'monospace' }}>{accesos.password}</div>
             </div>
 
-            <a href={`https://wa.me/52${accesos.telefono}?text=${encodeURIComponent(`Hola ${accesos.nombre}! Tu pago de la Quiniela Mundial 2026 fue confirmado (${accesos.cantidad} ${accesos.cantidad === 1 ? 'quiniela' : 'quinielas'}). Tus accesos:\n\nUsuario: ${accesos.usuario}\nPassword: ${accesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app para hacer tus pronósticos. ¡Suerte!`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Enviar por WhatsApp</a>
+            <a href={`https://wa.me/52${accesos.telefono}?text=${encodeURIComponent(`Hola ${accesos.nombre}! Tu pago de la Quiniela Mundial 2026 · Estadio Gana fue confirmado (${accesos.cantidad} ${accesos.cantidad === 1 ? 'quiniela' : 'quinielas'}). Tus accesos:\n\nUsuario: ${accesos.usuario}\nPassword: ${accesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app para hacer tus pronósticos. ¡Suerte!`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Enviar por WhatsApp</a>
             <button onClick={() => setAccesos(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
           </div>
         </div>
@@ -257,7 +265,7 @@ export default function Admin() {
           <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
         </div>
         <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
-        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026</div>
+        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026 · Estadio Gana</div>
       </footer>
     </div>
   );

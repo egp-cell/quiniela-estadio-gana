@@ -5,6 +5,14 @@ export default function TablaLideres() {
   const [ranking, setRanking] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   async function cargar() {
     try {
@@ -40,8 +48,8 @@ export default function TablaLideres() {
       <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '24px 30px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12 }}>
-            <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '4px 8px', borderRadius: 6, textDecoration: 'none', flexShrink: 0 }}>
-              <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 32, width: 'auto', display: 'block' }} />
+            <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
+              <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
             </a>
             <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none' }}>← Volver a mis quinielas</a>
             <button onClick={cargar} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>🔄 Actualizar</button>
@@ -110,7 +118,7 @@ export default function TablaLideres() {
         )}
 
         <div style={{ textAlign: 'center', marginTop: 30, fontSize: 12, color: '#888' }}>
-          🏆 Quiniela Mundial FIFA 2026
+          🏆 Quiniela Mundial FIFA 2026 · Estadio Gana
         </div>
       </div>
 
@@ -119,7 +127,7 @@ export default function TablaLideres() {
           <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
         </div>
         <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
-        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026</div>
+        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026 · Estadio Gana</div>
       </footer>
     </div>
   );
