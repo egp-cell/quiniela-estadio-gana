@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { COLORS, SPONSOR } from '../../lib/brand';
 
 const BANDERAS = {
   'México': 'mx', 'Sudáfrica': 'za', 'Corea del Sur': 'kr', 'Chequia': 'cz',
@@ -194,22 +195,25 @@ export default function PronosticosQuiniela() {
   const totalPronosticados = Object.keys(pronosticos).filter(k => pronosticos[k] && pronosticos[k].goles_local !== undefined).length;
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#F8F9FB', minHeight: '100vh' }}>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      <header style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', padding: '20px 30px', position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <a href="/jugar" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>← Mis quinielas</a>
-             <a href="/tabla" style={{ padding: '10px 20px', background: '#FAC775', color: '#412402', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: 14, boxShadow: '0 3px 10px rgba(250,199,117,0.4)' }}>🏆 Ver Tabla</a>
+      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+          <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '4px 8px', borderRadius: 6, textDecoration: 'none', flexShrink: 0 }}>
+            <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 32, width: 'auto', display: 'block' }} />
+          </a>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+              <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none' }}>← Mis quinielas</a>
+              <a href="/tabla" style={{ padding: '10px 20px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: 14, boxShadow: '0 3px 10px rgba(205,35,44,0.4)' }}>🏆 Ver Tabla</a>
             </div>
             <h1 style={{ fontSize: 22, fontWeight: 800, marginTop: 4 }}>{data.quiniela?.nombre || 'Quiniela'}</h1>
-            <div style={{ fontSize: 13, opacity: 0.8, marginTop: 2 }}>
+            <div style={{ fontSize: 13, opacity: 0.9, marginTop: 2 }}>
               {totalPronosticados} de {data.partidos.length} partidos pronosticados
             </div>
           </div>
-          <button onClick={logout} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>Salir</button>
+          <button onClick={logout} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>Salir</button>
         </div>
       </header>
 
@@ -226,7 +230,7 @@ export default function PronosticosQuiniela() {
                 onClick={() => setDiaActivo(clave)}
                 style={{
                   padding: '10px 16px',
-                  background: diaActivo === clave ? '#042C53' : '#F0F2F5',
+                  background: diaActivo === clave ? COLORS.primario : '#F0F2F5',
                   color: diaActivo === clave ? 'white' : '#666',
                   border: 'none',
                   borderRadius: 10,
@@ -243,7 +247,7 @@ export default function PronosticosQuiniela() {
                 <span style={{
                   fontSize: 11,
                   padding: '2px 6px',
-                  background: completo ? '#1D9E75' : (diaActivo === clave ? 'rgba(255,255,255,0.2)' : '#E0E0E0'),
+                  background: completo ? COLORS.verdeExito : (diaActivo === clave ? 'rgba(255,255,255,0.25)' : '#E0E0E0'),
                   color: completo ? 'white' : (diaActivo === clave ? 'white' : '#888'),
                   borderRadius: 6
                 }}>
@@ -255,7 +259,7 @@ export default function PronosticosQuiniela() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 800, margin: '0 auto', padding: '30px 20px' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: '30px 20px', flex: 1, width: '100%', boxSizing: 'border-box' }}>
         {partidosDelDia.length === 0 ? (
           <div style={{ textAlign: 'center', color: '#888', padding: 40 }}>No hay partidos en este día</div>
         ) : (
@@ -300,7 +304,7 @@ export default function PronosticosQuiniela() {
                         textAlign: 'center',
                         fontSize: 22,
                         fontWeight: 800,
-                        border: '2px solid ' + (estadoGuardado === 'guardado' ? '#1D9E75' : estadoGuardado === 'error' ? '#E04444' : '#E0E0E0'),
+                        border: '2px solid ' + (estadoGuardado === 'guardado' ? COLORS.verdeExito : estadoGuardado === 'error' ? '#E04444' : '#E0E0E0'),
                         borderRadius: 10,
                         background: empezado ? '#F0F2F5' : 'white'
                       }}
@@ -319,7 +323,7 @@ export default function PronosticosQuiniela() {
                         textAlign: 'center',
                         fontSize: 22,
                         fontWeight: 800,
-                        border: '2px solid ' + (estadoGuardado === 'guardado' ? '#1D9E75' : estadoGuardado === 'error' ? '#E04444' : '#E0E0E0'),
+                        border: '2px solid ' + (estadoGuardado === 'guardado' ? COLORS.verdeExito : estadoGuardado === 'error' ? '#E04444' : '#E0E0E0'),
                         borderRadius: 10,
                         background: empezado ? '#F0F2F5' : 'white'
                       }}
@@ -334,7 +338,7 @@ export default function PronosticosQuiniela() {
                 </div>
 
                 {estadoGuardado && (
-                  <div style={{ textAlign: 'center', marginTop: 10, fontSize: 11, fontWeight: 600, color: estadoGuardado === 'guardado' ? '#1D9E75' : estadoGuardado === 'error' ? '#E04444' : '#888' }}>
+                  <div style={{ textAlign: 'center', marginTop: 10, fontSize: 11, fontWeight: 600, color: estadoGuardado === 'guardado' ? COLORS.verdeExito : estadoGuardado === 'error' ? '#E04444' : '#888' }}>
                     {estadoGuardado === 'guardando' && '💾 Guardando...'}
                     {estadoGuardado === 'guardado' && '✓ Guardado'}
                     {estadoGuardado === 'error' && '✕ Error'}
@@ -345,6 +349,14 @@ export default function PronosticosQuiniela() {
           })
         )}
       </div>
+
+      <footer style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '40px 20px', textAlign: 'center' }}>
+        <div style={{ display: 'inline-block', background: 'white', padding: 16, borderRadius: 16, marginBottom: 16 }}>
+          <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
+        </div>
+        <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
+        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026</div>
+      </footer>
     </div>
   );
 }

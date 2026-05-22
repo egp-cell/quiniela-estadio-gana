@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { COLORS, SPONSOR } from '../../lib/brand';
 
 const BANDERAS = {
   'México': 'mx', 'Sudáfrica': 'za', 'Corea del Sur': 'kr', 'Chequia': 'cz',
@@ -120,20 +121,23 @@ async function borrarResultado(partidoId) {
   });
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#F8F9FB', minHeight: '100vh' }}>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      <header style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', padding: '20px 30px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <a href="/admin" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>← Panel admin</a>
+      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+          <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '4px 8px', borderRadius: 6, textDecoration: 'none', flexShrink: 0 }}>
+            <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 32, width: 'auto', display: 'block' }} />
+          </a>
+          <div style={{ flex: 1 }}>
+            <a href="/admin" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none' }}>← Panel admin</a>
             <h1 style={{ fontSize: 22, fontWeight: 800, marginTop: 4 }}>⚽ Capturar resultados</h1>
           </div>
-          <button onClick={cargar} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>🔄 Refrescar</button>
+          <button onClick={cargar} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>🔄 Refrescar</button>
         </div>
       </header>
 
-      <div style={{ maxWidth: 1000, margin: '0 auto', padding: 30 }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto', padding: 30, flex: 1, width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
           {[
             ['todos', 'Todos'],
@@ -142,7 +146,7 @@ async function borrarResultado(partidoId) {
           ].map(([key, label]) => (
             <button key={key} onClick={() => setFiltro(key)} style={{
               padding: '10px 18px',
-              background: filtro === key ? '#042C53' : 'white',
+              background: filtro === key ? COLORS.primario : 'white',
               color: filtro === key ? 'white' : '#666',
               border: '1px solid #E0E0E0',
               borderRadius: 10, cursor: 'pointer', fontWeight: 700, fontSize: 13
@@ -162,7 +166,7 @@ async function borrarResultado(partidoId) {
             return (
               <div key={p.id} style={{
                 background: 'white', borderRadius: 14, padding: 18, marginBottom: 10,
-                border: finalizado ? '2px solid #1D9E75' : '1px solid #E0E0E0'
+                border: finalizado ? `2px solid ${COLORS.verdeExito}` : '1px solid #E0E0E0'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12, fontSize: 12, color: '#888' }}>
                   <span>{p.fase}{p.grupo ? ` · Grupo ${p.grupo}` : ''}</span>
@@ -202,7 +206,7 @@ async function borrarResultado(partidoId) {
                       disabled={guardando[p.id]}
                       style={{
                         padding: '8px 14px',
-                        background: finalizado ? '#EF9F27' : '#1D9E75',
+                        background: finalizado ? '#EF9F27' : COLORS.verdeExito,
                         color: 'white', border: 'none', borderRadius: 8,
                         cursor: 'pointer', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap'
                       }}
@@ -230,6 +234,14 @@ async function borrarResultado(partidoId) {
           })
         )}
       </div>
+
+      <footer style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '40px 20px', textAlign: 'center' }}>
+        <div style={{ display: 'inline-block', background: 'white', padding: 16, borderRadius: 16, marginBottom: 16 }}>
+          <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
+        </div>
+        <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
+        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026</div>
+      </footer>
     </div>
   );
 }

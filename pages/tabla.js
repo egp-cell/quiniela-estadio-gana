@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { COLORS, SPONSOR } from '../lib/brand';
 
 export default function TablaLideres() {
   const [ranking, setRanking] = useState([]);
@@ -33,23 +34,26 @@ export default function TablaLideres() {
   }
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#F8F9FB', minHeight: '100vh' }}>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      <header style={{ background: 'linear-gradient(135deg, #042C53, #0C447C)', color: 'white', padding: '24px 30px' }}>
+      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '24px 30px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <a href="/jugar" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>← Volver a mis quinielas</a>
-            <button onClick={cargar} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>🔄 Actualizar</button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12 }}>
+            <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '4px 8px', borderRadius: 6, textDecoration: 'none', flexShrink: 0 }}>
+              <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 32, width: 'auto', display: 'block' }} />
+            </a>
+            <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none' }}>← Volver a mis quinielas</a>
+            <button onClick={cargar} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>🔄 Actualizar</button>
           </div>
           <h1 style={{ fontSize: 28, fontWeight: 900, margin: 0 }}>🏆 Tabla de Líderes</h1>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', margin: '4px 0 0 0' }}>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.9)', margin: '4px 0 0 0' }}>
             {ranking.length} quinielas activas · Actualización automática cada 30s
           </p>
         </div>
       </header>
 
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: 24 }}>
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: 24, flex: 1, width: '100%', boxSizing: 'border-box' }}>
 
         <input
           type="text"
@@ -75,7 +79,7 @@ export default function TablaLideres() {
           </div>
         ) : (
           <div style={{ background: 'white', borderRadius: 14, overflow: 'hidden', border: '1px solid #E0E0E0' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px 70px 70px', padding: '12px 16px', background: '#F8F9FB', fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px 70px 70px', padding: '12px 16px', background: COLORS.fondoNeutro, fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
               <div style={{ textAlign: 'center' }}>Pos</div>
               <div>Quiniela</div>
               <div style={{ textAlign: 'center' }}>Pts</div>
@@ -93,11 +97,11 @@ export default function TablaLideres() {
                     </div>
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, color: '#042C53', fontSize: 14 }}>{q.nombreQuiniela}</div>
+                    <div style={{ fontWeight: 700, color: COLORS.azulDetalle, fontSize: 14 }}>{q.nombreQuiniela}</div>
                     <div style={{ fontSize: 12, color: '#888' }}>{q.nombreUsuario}</div>
                   </div>
-                  <div style={{ textAlign: 'center', fontSize: 20, fontWeight: 900, color: '#042C53' }}>{q.puntos}</div>
-                  <div style={{ textAlign: 'center', fontSize: 14, color: '#1D9E75', fontWeight: 700 }}>{q.exactos}</div>
+                  <div style={{ textAlign: 'center', fontSize: 20, fontWeight: 900, color: COLORS.azulDetalle }}>{q.puntos}</div>
+                  <div style={{ textAlign: 'center', fontSize: 14, color: COLORS.verdeExito, fontWeight: 700 }}>{q.exactos}</div>
                   <div style={{ textAlign: 'center', fontSize: 14, color: '#666', fontWeight: 600 }}>{q.aciertos}</div>
                 </div>
               );
@@ -109,6 +113,14 @@ export default function TablaLideres() {
           🏆 Quiniela Mundial FIFA 2026
         </div>
       </div>
+
+      <footer style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '40px 20px', textAlign: 'center' }}>
+        <div style={{ display: 'inline-block', background: 'white', padding: 16, borderRadius: 16, marginBottom: 16 }}>
+          <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
+        </div>
+        <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
+        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026</div>
+      </footer>
     </div>
   );
 }
