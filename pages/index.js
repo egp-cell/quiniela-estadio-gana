@@ -219,7 +219,7 @@ export default function Home() {
           </div>
           <h2 style={{ fontSize: isMobile ? 24 : 32, fontWeight: 800, color: COLORS.azulDetalle, marginBottom: 14 }}>{SPONSOR.nombre} aporta ${SPONSOR.aporteBolsa.toLocaleString()} MXN a la bolsa</h2>
           <p style={{ fontSize: isMobile ? 14 : 16, color: '#555', maxWidth: 640, margin: '0 auto 24px' }}>
-            Gracias a {SPONSOR.nombre}, patrocinador oficial de la Quiniela Mundial 2026, la bolsa se incrementa con un aporte directo para los ganadores. ¡Conócelos!
+            Como patrocinador oficial de la Quiniela Mundial 2026, {SPONSOR.nombre} se suma con un aporte directo a la bolsa de premios. Además, durante todo el Mundial habrá <b>premios semanales</b> y <b>bonos exclusivos</b> para los participantes de la quiniela.
           </p>
           <a href={SPONSOR.url} target="_blank" rel="noreferrer noopener" style={{ display: 'inline-block', padding: '14px 28px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 15 }}>Visitar {SPONSOR.nombre} →</a>
         </div>

@@ -86,6 +86,21 @@ export default function Admin() {
     }
   }
 
+  async function toggleCortesia(u) {
+    const mensaje = u.es_cortesia
+      ? `¿Quitar cortesía de ${u.nombre}? Esta quiniela volverá a contar en la bolsa.`
+      : `¿Marcar como cortesía? Esta quiniela NO se contará en la bolsa pero sigue participando en el ranking.`;
+    if (!confirm(mensaje)) return;
+    const r = await fetch('/api/admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accion: 'toggle_cortesia', usuarioId: u.id })
+    });
+    const d = await r.json();
+    if (d.exito) cargar();
+    else alert('Error: ' + d.error);
+  }
+
   const filtrados = data.usuarios.filter(u => tab === 'Todos' ? true : u.estado === tab);
 
   return (
@@ -153,12 +168,26 @@ export default function Admin() {
               <tbody>
                 {filtrados.map(u => (
                   <tr key={u.id} style={{ borderTop: '1px solid #F0F2F5' }}>
-                    <td style={{ padding: 14, fontWeight: 600 }}>{u.nombre}</td>
+                    <td style={{ padding: 14, fontWeight: 600 }}>
+                      {u.nombre}
+                      {u.es_cortesia && (
+                        <span style={{ marginLeft: 8, padding: '2px 8px', background: '#FFF3E0', color: '#854F0B', borderRadius: 10, fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                          🎁 Cortesía
+                        </span>
+                      )}
+                    </td>
                     <td style={{ padding: 14, fontSize: 13, color: '#666' }}>{u.email}</td>
                     <td style={{ padding: 14, fontSize: 13, color: '#666' }}>
                       <a href={`https://wa.me/52${u.telefono}`} target="_blank" rel="noreferrer" style={{ color: '#25D366', textDecoration: 'none' }}>{u.telefono}</a>
                     </td>
-                    <td style={{ padding: 14, textAlign: 'center', fontWeight: 700 }}>{u.cantidad_quinielas}</td>
+                    <td style={{ padding: 14, textAlign: 'center' }}>
+                      <div style={{ fontWeight: 700 }}>{u.cantidad_quinielas}</div>
+                      {u.estado === 'Activo' && (
+                        <div style={{ fontSize: 11, marginTop: 2, color: u.es_cortesia ? '#EF9F27' : '#888', fontWeight: 600 }}>
+                          {u.es_cortesia ? '🎁 Cortesía' : `$${((u.cantidad_quinielas || 0) * 3000).toLocaleString()} MXN`}
+                        </div>
+                      )}
+                    </td>
                     <td style={{ padding: 14, textAlign: 'right', whiteSpace: 'nowrap' }}>
                       {u.estado === 'Pendiente_Pago' && (
                         <>
@@ -169,6 +198,15 @@ export default function Admin() {
                       {u.estado === 'Activo' && (
                         <>
                           <button onClick={() => setVerAccesos(u)} style={{ padding: '6px 12px', background: COLORS.primario, color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginRight: 6, fontWeight: 600, fontSize: 12 }}>🔑 Ver accesos</button>
+                          <button onClick={() => toggleCortesia(u)} style={{
+                            padding: '6px 12px',
+                            background: u.es_cortesia ? '#EF9F27' : '#F0F2F5',
+                            color: u.es_cortesia ? 'white' : '#666',
+                            border: u.es_cortesia ? 'none' : '1px solid #E0E0E0',
+                            borderRadius: 6, cursor: 'pointer', marginRight: 6, fontWeight: 600, fontSize: 12
+                          }}>
+                            {u.es_cortesia ? '✓ Cortesía activa' : '🎁 Marcar cortesía'}
+                          </button>
                         </>
                       )}
                       <button onClick={() => eliminar(u.id, u.nombre)} style={{ padding: '6px 10px', background: '#1A1A1A', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 12 }} title="Eliminar permanentemente">🗑️</button>

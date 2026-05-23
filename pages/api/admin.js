@@ -96,6 +96,21 @@ export default async function handler(req, res) {
         return res.status(200).json({ exito: true });
       }
 
+      if (accion === 'toggle_cortesia') {
+        const { data: usuario } = await supabase.from('usuarios').select('*').eq('id', usuarioId).single();
+        if (!usuario) return res.status(404).json({ exito: false, error: 'Usuario no encontrado' });
+
+        const nuevoEstado = !usuario.es_cortesia;
+        const nuevoTotal = nuevoEstado ? 0 : (usuario.cantidad_quinielas || 0) * 3000;
+
+        await supabase.from('usuarios').update({
+          es_cortesia: nuevoEstado,
+          total_pagado: nuevoTotal
+        }).eq('id', usuarioId);
+
+        return res.status(200).json({ exito: true, es_cortesia: nuevoEstado });
+      }
+
       if (accion === 'eliminar') {
         // Borrar en orden por las foreign keys
         await supabase.from('puntuaciones').delete().eq('quiniela_id', usuarioId);
