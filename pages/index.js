@@ -393,7 +393,7 @@ export default function Home() {
 
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>📞 Contacto</h3>
             <p style={{ fontSize: 13, color: '#444', marginBottom: 10 }}>Para cualquier duda, problema con tu inscripción o pago, contacta al organizador:</p>
-            <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}?text=${encodeURIComponent('Hola Emiliano, tengo una duda sobre la Quiniela Mundial 2026 · Estadio Gana:')}`} target="_blank" rel="noreferrer" style={{ display: 'block', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 8 }}>📱 Contactar por WhatsApp</a>
+            <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}?text=${encodeURIComponent('Bienvenido a Estadio Gana. Soy participante de la Quiniela Mundial 2026 y tengo una duda:')}`} target="_blank" rel="noreferrer" style={{ display: 'block', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 8 }}>📱 Contactar por WhatsApp</a>
             <p style={{ fontSize: 11, color: '#888', textAlign: 'center' }}>Emiliano · +52 55 6916 1882</p>
 
             <button onClick={() => setReglamento(false)} style={{ marginTop: 24, width: '100%', padding: 14, background: COLORS.primario, color: 'white', border: 'none', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>Cerrar</button>
