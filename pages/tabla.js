@@ -118,7 +118,7 @@ export default function TablaLideres() {
         )}
 
         <div style={{ textAlign: 'center', marginTop: 30, fontSize: 12, color: '#888' }}>
-          🏆 Quiniela Mundial FIFA 2026 · Estadio Gana
+          🏆 Quiniela Estadio Gana
         </div>
       </div>
 
@@ -127,7 +127,7 @@ export default function TablaLideres() {
           <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
         </div>
         <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
-        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026 · Estadio Gana</div>
+        <div style={{ fontWeight: 700 }}>⚽ Quiniela Estadio Gana</div>
       </footer>
     </div>
   );

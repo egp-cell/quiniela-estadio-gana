@@ -248,7 +248,7 @@ async function borrarResultado(partidoId) {
           <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
         </div>
         <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
-        <div style={{ fontWeight: 700 }}>⚽ Quiniela Mundial 2026 · Estadio Gana</div>
+        <div style={{ fontWeight: 700 }}>⚽ Quiniela Estadio Gana</div>
       </footer>
     </div>
   );

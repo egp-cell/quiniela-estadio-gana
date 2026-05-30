@@ -112,7 +112,7 @@ export default function Home() {
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 30 : 40, alignItems: 'center' }}>
             <div style={{ textAlign: isMobile ? 'center' : 'left' }}>
-              <h1 style={{ fontSize: isMobile ? 38 : 56, fontWeight: 900, lineHeight: 1.05, marginBottom: 8 }}>Quiniela Mundial</h1>
+              <h1 style={{ fontSize: isMobile ? 38 : 56, fontWeight: 900, lineHeight: 1.05, marginBottom: 8 }}>Quiniela Estadio Gana</h1>
               <div style={{ fontSize: isMobile ? 80 : 110, fontWeight: 900, lineHeight: 0.9, color: COLORS.dorado, marginBottom: 24 }}>2026</div>
               <p style={{ fontSize: isMobile ? 15 : 17, opacity: 0.9, marginBottom: 28 }}>Inscríbete, predice marcadores y compite por el primer lugar.</p>
               <a href="#registro" style={{ display: 'inline-block', padding: '14px 26px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700 }}>Inscribirme</a>
@@ -148,7 +148,7 @@ export default function Home() {
       </div>
 
       <section style={{ padding: isMobile ? '60px 16px' : '80px 20px', background: `linear-gradient(180deg, ${COLORS.fondoNeutro}, #EBEEF3)` }}>
-        <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', color: COLORS.azulDetalle, marginBottom: isMobile ? 28 : 40 }}>Los 12 grupos del Mundial</h2>
+        <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', color: COLORS.azulDetalle, marginBottom: isMobile ? 28 : 40 }}>Los 12 grupos</h2>
         {isMobile ? (
           <div style={{ maxWidth: 600, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {Object.keys(GRUPOS).map(letra => {
@@ -191,7 +191,7 @@ export default function Home() {
       </section>
 
       <section style={{ background: `linear-gradient(180deg, ${COLORS.azulDetalle}, #0C447C)`, color: 'white', padding: isMobile ? '50px 16px' : '60px 20px' }}>
-        <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', marginBottom: isMobile ? 24 : 32 }}>Premios del Mundial</h2>
+        <h2 style={{ fontSize: isMobile ? 26 : 36, fontWeight: 800, textAlign: 'center', marginBottom: isMobile ? 24 : 32 }}>Premios</h2>
         <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center', background: 'rgba(255,255,255,0.08)', borderRadius: 24, padding: isMobile ? 28 : 40, marginBottom: 24 }}>
           <div style={{ fontSize: 12, letterSpacing: 3, opacity: 0.7, marginBottom: 12 }}>BOLSA ACUMULADA</div>
           <div style={{ fontSize: isMobile ? 44 : 64, fontWeight: 900, color: COLORS.dorado }}>${bolsa.toLocaleString()}</div>
@@ -219,7 +219,7 @@ export default function Home() {
           </div>
           <h2 style={{ fontSize: isMobile ? 24 : 32, fontWeight: 800, color: COLORS.azulDetalle, marginBottom: 14 }}>{SPONSOR.nombre} aporta ${SPONSOR.aporteBolsa.toLocaleString()} MXN a la bolsa</h2>
           <p style={{ fontSize: isMobile ? 14 : 16, color: '#555', maxWidth: 640, margin: '0 auto 24px' }}>
-            Como patrocinador oficial de la Quiniela Mundial 2026, {SPONSOR.nombre} se suma con un aporte directo a la bolsa de premios. Además, durante todo el Mundial habrá <b>premios semanales</b> y <b>bonos exclusivos</b> para los participantes de la quiniela.
+            Como patrocinador oficial de la Quiniela Estadio Gana, {SPONSOR.nombre} se suma con un aporte directo a la bolsa de premios. Además, durante todo el torneo habrá <b>premios semanales</b> y <b>bonos exclusivos</b> para los participantes de la quiniela.
           </p>
           <a href={SPONSOR.url} target="_blank" rel="noreferrer noopener" style={{ display: 'inline-block', padding: '14px 28px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 15 }}>Visitar {SPONSOR.nombre} →</a>
         </div>
@@ -273,7 +273,7 @@ export default function Home() {
               <div style={{ background: COLORS.fondoNeutro, borderRadius: 14, padding: 40, textAlign: 'center', border: '1px solid #E0E0E0', marginBottom: 16 }}>
                 <div style={{ fontSize: 48, marginBottom: 12 }}>⚽</div>
                 <div style={{ fontWeight: 700, color: COLORS.azulDetalle, fontSize: 16, marginBottom: 8 }}>Aún no hay líderes</div>
-                <div style={{ fontSize: 13, color: '#666' }}>Cuando empiece el Mundial y se capturen los primeros resultados, aquí verás el ranking en vivo.</div>
+                <div style={{ fontSize: 13, color: '#666' }}>Cuando se capturen los primeros resultados, aquí verás el ranking en vivo.</div>
               </div>
             ) : (
               <div style={{ background: COLORS.fondoNeutro, borderRadius: 14, overflow: 'hidden', border: '1px solid #E0E0E0', marginBottom: 16 }}>
@@ -314,7 +314,7 @@ export default function Home() {
         <div onClick={() => setReglamento(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 24, maxWidth: 600, width: '100%', padding: isMobile ? 24 : 40, maxHeight: '90vh', overflowY: 'auto' }}>
             <h2 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: COLORS.azulDetalle, marginBottom: 4 }}>📖 Reglamento</h2>
-            <p style={{ color: '#666', marginBottom: 24, fontSize: 13 }}>Quiniela Mundial 2026 · Estadio Gana · Lee bien antes de inscribirte</p>
+            <p style={{ color: '#666', marginBottom: 24, fontSize: 13 }}>Quiniela Estadio Gana · Lee bien antes de inscribirte</p>
 
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 20, marginBottom: 10 }}>💰 Inscripción</h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -358,7 +358,7 @@ export default function Home() {
               <li style={{ padding: '8px 12px', background: COLORS.fondoNeutro, borderLeft: `3px solid ${COLORS.primario}`, borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>2do lugar:</b> 23% de la bolsa total</li>
               <li style={{ padding: '8px 12px', background: COLORS.fondoNeutro, borderLeft: `3px solid ${COLORS.primario}`, borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>3er lugar:</b> 14% de la bolsa total</li>
               <li style={{ padding: '8px 12px', background: COLORS.fondoNeutro, borderLeft: `3px solid ${COLORS.primario}`, borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Comisión organizador:</b> 7% (cubre operación y mantenimiento de la plataforma)</li>
-              <li style={{ padding: '8px 12px', background: COLORS.fondoNeutro, borderLeft: `3px solid ${COLORS.primario}`, borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Pago de premios:</b> tras la final del Mundial. El organizador notificará a los ganadores por WhatsApp para coordinar la transferencia</li>
+              <li style={{ padding: '8px 12px', background: COLORS.fondoNeutro, borderLeft: `3px solid ${COLORS.primario}`, borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Pago de premios:</b> tras la final. El organizador notificará a los ganadores por WhatsApp para coordinar la transferencia</li>
             </ul>
 
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>⚖️ Empates en el ranking</h3>
@@ -372,7 +372,7 @@ export default function Home() {
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>❓ Preguntas frecuentes</h3>
             <div style={{ background: COLORS.fondoNeutro, padding: 14, borderRadius: 10, marginBottom: 8 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.azulDetalle, marginBottom: 4 }}>¿Qué pasa si un partido se cancela o se aplaza?</div>
-              <div style={{ fontSize: 13, color: '#555' }}>Si la FIFA cancela un partido, se anula del cálculo de puntos. Si se reprograma, los pronósticos siguen vigentes para la nueva fecha.</div>
+              <div style={{ fontSize: 13, color: '#555' }}>Si se cancela un partido, se anula del cálculo de puntos. Si se reprograma, los pronósticos siguen vigentes para la nueva fecha.</div>
             </div>
             <div style={{ background: COLORS.fondoNeutro, padding: 14, borderRadius: 10, marginBottom: 8 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.azulDetalle, marginBottom: 4 }}>¿Puedo registrar varias quinielas con nombres distintos?</div>
@@ -393,7 +393,7 @@ export default function Home() {
 
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>📞 Contacto</h3>
             <p style={{ fontSize: 13, color: '#444', marginBottom: 10 }}>Para cualquier duda, problema con tu inscripción o pago, contacta al organizador:</p>
-            <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}?text=${encodeURIComponent('Bienvenido a Estadio Gana. Soy participante de la Quiniela Mundial 2026 y tengo una duda:')}`} target="_blank" rel="noreferrer" style={{ display: 'block', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 8 }}>📱 Contactar por WhatsApp</a>
+            <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}?text=${encodeURIComponent('Bienvenido a Estadio Gana. Soy participante de la Quiniela Estadio Gana y tengo una duda:')}`} target="_blank" rel="noreferrer" style={{ display: 'block', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 8 }}>📱 Contactar por WhatsApp</a>
             <p style={{ fontSize: 11, color: '#888', textAlign: 'center' }}>Emiliano · +52 55 6916 1882</p>
 
             <button onClick={() => setReglamento(false)} style={{ marginTop: 24, width: '100%', padding: 14, background: COLORS.primario, color: 'white', border: 'none', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>Cerrar</button>
@@ -406,9 +406,8 @@ export default function Home() {
           <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: 60, width: 'auto', display: 'block' }} />
         </div>
         <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 6 }}>Patrocinador oficial · {SPONSOR.nombre}</div>
-        <div style={{ fontWeight: 700, marginBottom: 12 }}>⚽ Quiniela Mundial 2026 · Estadio Gana</div>
+        <div style={{ fontWeight: 700, marginBottom: 12 }}>⚽ Quiniela Estadio Gana</div>
         <a href={`https://wa.me/${WHATSAPP_ORGANIZADOR}`} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '8px 16px', background: 'rgba(255,255,255,0.15)', color: 'white', borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>📱 Contactar al organizador</a>
-        <p style={{ fontSize: 11, opacity: 0.6, marginTop: 16 }}>Sitio no afiliado a la FIFA. Quiniela privada.</p>
       </footer>
     </div>
   );

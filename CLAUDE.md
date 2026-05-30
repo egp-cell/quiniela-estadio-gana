@@ -11,7 +11,7 @@ Guía para que Claude (o cualquier asistente) entienda este proyecto rápido.
 
 ## Qué es esto
 
-Sitio web público de una **quiniela privada del Mundial FIFA 2026**. Los participantes pagan, pronostican los marcadores de los 104 partidos, suman puntos y se reparte una bolsa.
+Sitio web público de una **quiniela privada del torneo 2026**. Los participantes pagan, pronostican los marcadores de los 104 partidos, suman puntos y se reparte una bolsa.
 
 Producción: https://quiniela-mundial-2026-rouge-nu.vercel.app
 
