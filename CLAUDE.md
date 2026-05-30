@@ -13,7 +13,7 @@ Guía para que Claude (o cualquier asistente) entienda este proyecto rápido.
 
 Sitio web público de una **quiniela privada del torneo 2026**. Los participantes pagan, pronostican los marcadores de los 104 partidos, suman puntos y se reparte una bolsa.
 
-Producción: https://quiniela-estadio-gana-rouge-nu.vercel.app
+Producción: https://quiniela.estadiogana.mx
 
 ## Stack
 
@@ -104,7 +104,7 @@ Ambas son la URL pública del proyecto Supabase y la anon key. Si Vercel no las 
 
 ## URLs y enlaces importantes
 
-- **Producción:** https://quiniela-estadio-gana-rouge-nu.vercel.app
+- **Producción:** https://quiniela.estadiogana.mx
 - **MoneyPool (pagos):** https://www.moneypool.mx/p/myMV4GY
 - **WhatsApp organizador:** `https://wa.me/525569161882`
 - **Panel admin:** `/admin` (¡público, sin login!)
