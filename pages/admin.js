@@ -270,7 +270,7 @@ export default function Admin() {
             </div>
 
             {verAccesos.usuario && verAccesos.password && (
-              <a href={`https://wa.me/52${verAccesos.telefono}?text=${encodeURIComponent(`Hola ${verAccesos.nombre}! Aquí tus accesos para la Quiniela Estadio Gana:\n\nUsuario: ${verAccesos.usuario}\nPassword: ${verAccesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app/jugar`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Reenviar por WhatsApp</a>
+              <a href={`https://wa.me/52${verAccesos.telefono}?text=${encodeURIComponent(`Hola ${verAccesos.nombre}! Aquí tus accesos para la Quiniela Estadio Gana:\n\nUsuario: ${verAccesos.usuario}\nPassword: ${verAccesos.password}\n\nIngresa a https://quiniela-estadio-gana-rouge-nu.vercel.app/jugar`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Reenviar por WhatsApp</a>
             )}
             <button onClick={() => setVerAccesos(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
           </div>
@@ -292,7 +292,7 @@ export default function Admin() {
               <div style={{ fontSize: 18, fontWeight: 700, color: COLORS.azulDetalle, fontFamily: 'monospace' }}>{accesos.password}</div>
             </div>
 
-            <a href={`https://wa.me/52${accesos.telefono}?text=${encodeURIComponent(`Hola ${accesos.nombre}! Tu pago de la Quiniela Estadio Gana fue confirmado (${accesos.cantidad} ${accesos.cantidad === 1 ? 'quiniela' : 'quinielas'}). Tus accesos:\n\nUsuario: ${accesos.usuario}\nPassword: ${accesos.password}\n\nIngresa a https://quiniela-mundial-2026-rouge-nu.vercel.app para hacer tus pronósticos. ¡Suerte!`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Enviar por WhatsApp</a>
+            <a href={`https://wa.me/52${accesos.telefono}?text=${encodeURIComponent(`Hola ${accesos.nombre}! Tu pago de la Quiniela Estadio Gana fue confirmado (${accesos.cantidad} ${accesos.cantidad === 1 ? 'quiniela' : 'quinielas'}). Tus accesos:\n\nUsuario: ${accesos.usuario}\nPassword: ${accesos.password}\n\nIngresa a https://quiniela-estadio-gana-rouge-nu.vercel.app para hacer tus pronósticos. ¡Suerte!`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Enviar por WhatsApp</a>
             <button onClick={() => setAccesos(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
           </div>
         </div>
