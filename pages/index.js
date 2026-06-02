@@ -249,6 +249,9 @@ export default function Home() {
           <button type="submit" disabled={enviando} style={{ width: '100%', padding: 18, background: `linear-gradient(135deg, ${COLORS.acentoCTA}, ${COLORS.acentoCTAOscuro})`, color: 'white', border: 'none', borderRadius: 12, fontSize: 16, fontWeight: 700, cursor: 'pointer' }}>
             {enviando ? 'Procesando...' : 'Continuar al pago →'}
           </button>
+          <a href="https://www.moneypool.mx/p/myMV4GY" target="_blank" rel="noreferrer noopener" style={{ display: 'block', textAlign: 'center', marginTop: 12, padding: 14, background: 'white', color: COLORS.acentoCTA, border: `1.5px solid ${COLORS.acentoCTA}`, borderRadius: 12, fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
+            Ya me registré pero no he pagado →
+          </a>
         </form>
       </section>
 
