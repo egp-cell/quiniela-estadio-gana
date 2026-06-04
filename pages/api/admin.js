@@ -112,21 +112,39 @@ export default async function handler(req, res) {
       }
 
       if (accion === 'eliminar') {
-        // Borrar en orden por las foreign keys
-        await supabase.from('puntuaciones').delete().eq('quiniela_id', usuarioId);
-        await supabase.from('pronosticos').delete().eq('quiniela_id', usuarioId);
+        // 1. Obtener IDs de quinielas del usuario
+        const { data: quinielas, error: eGet } = await supabase
+          .from('quinielas').select('id').eq('usuario_id', usuarioId);
+        if (eGet) return res.status(500).json({ exito: false, error: 'No se pudieron leer quinielas: ' + eGet.message });
 
-        // Obtener IDs de quinielas para borrar sus pronosticos/puntuaciones
-        const { data: quinielas } = await supabase.from('quinielas').select('id').eq('usuario_id', usuarioId);
-        if (quinielas && quinielas.length > 0) {
-          const quinielaIds = quinielas.map(q => q.id);
-          await supabase.from('puntuaciones').delete().in('quiniela_id', quinielaIds);
-          await supabase.from('pronosticos').delete().in('quiniela_id', quinielaIds);
+        const quinielaIds = (quinielas || []).map(q => q.id);
+
+        // 2. Borrar puntuaciones y pronosticos asociados a esas quinielas
+        if (quinielaIds.length > 0) {
+          const { error: ePunt } = await supabase.from('puntuaciones').delete().in('quiniela_id', quinielaIds);
+          if (ePunt) return res.status(500).json({ exito: false, error: 'No se borraron puntuaciones: ' + ePunt.message });
+          const { error: ePron } = await supabase.from('pronosticos').delete().in('quiniela_id', quinielaIds);
+          if (ePron) return res.status(500).json({ exito: false, error: 'No se borraron pronosticos: ' + ePron.message });
         }
 
-        await supabase.from('quinielas').delete().eq('usuario_id', usuarioId);
-        await supabase.from('pagos').delete().eq('usuario_id', usuarioId);
-        await supabase.from('usuarios').delete().eq('id', usuarioId);
+        // 3. Borrar quinielas, pagos y usuario
+        const { error: eQuin } = await supabase.from('quinielas').delete().eq('usuario_id', usuarioId);
+        if (eQuin) return res.status(500).json({ exito: false, error: 'No se borraron quinielas: ' + eQuin.message });
+
+        const { error: ePag } = await supabase.from('pagos').delete().eq('usuario_id', usuarioId);
+        if (ePag) return res.status(500).json({ exito: false, error: 'No se borraron pagos: ' + ePag.message });
+
+        const { error: eUsr } = await supabase.from('usuarios').delete().eq('id', usuarioId);
+        if (eUsr) return res.status(500).json({ exito: false, error: 'No se borró el usuario: ' + eUsr.message });
+
+        // 4. Verificar que realmente desapareció (defensa contra RLS o triggers silenciosos)
+        const { data: chequeo } = await supabase.from('usuarios').select('id').eq('id', usuarioId).maybeSingle();
+        if (chequeo) {
+          return res.status(500).json({
+            exito: false,
+            error: 'El usuario no se borró (posible bloqueo de Supabase). Revisa políticas RLS en la tabla usuarios.'
+          });
+        }
 
         return res.status(200).json({ exito: true });
       }

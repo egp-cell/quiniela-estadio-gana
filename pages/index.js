@@ -331,13 +331,13 @@ export default function Home() {
 
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>🎯 Sistema de puntos</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
-              <div style={{ padding: 14, background: '#FAEEDA', borderRadius: 10, textAlign: 'center' }}>
-                <div style={{ fontSize: 26, fontWeight: 800, color: '#854F0B' }}>3 pts</div>
-                <div style={{ fontSize: 11, color: '#633806', textTransform: 'uppercase', fontWeight: 600 }}>Acertar ganador o empate</div>
+              <div style={{ padding: 14, background: '#E3EAF5', borderRadius: 10, textAlign: 'center' }}>
+                <div style={{ fontSize: 26, fontWeight: 800, color: COLORS.azulDetalle }}>3 pts</div>
+                <div style={{ fontSize: 11, color: COLORS.azulDetalle, textTransform: 'uppercase', fontWeight: 600 }}>Acertar ganador o empate</div>
               </div>
-              <div style={{ padding: 14, background: '#FAEEDA', borderRadius: 10, textAlign: 'center' }}>
-                <div style={{ fontSize: 26, fontWeight: 800, color: '#854F0B' }}>5 pts</div>
-                <div style={{ fontSize: 11, color: '#633806', textTransform: 'uppercase', fontWeight: 600 }}>Marcador exacto</div>
+              <div style={{ padding: 14, background: '#E3EAF5', borderRadius: 10, textAlign: 'center' }}>
+                <div style={{ fontSize: 26, fontWeight: 800, color: COLORS.azulDetalle }}>5 pts</div>
+                <div style={{ fontSize: 11, color: COLORS.azulDetalle, textTransform: 'uppercase', fontWeight: 600 }}>Marcador exacto</div>
               </div>
             </div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
