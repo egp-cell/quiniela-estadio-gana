@@ -4,6 +4,7 @@ import { COLORS, SPONSOR } from '../lib/brand';
 export default function Admin() {
   const [data, setData] = useState({ stats: { registrados: 0, pendientes: 0, activos: 0, recaudado: 0 }, usuarios: [] });
   const [tab, setTab] = useState('Pendiente_Pago');
+  const [busqueda, setBusqueda] = useState('');
   const [accesos, setAccesos] = useState(null);
   const [verAccesos, setVerAccesos] = useState(null);
   const [aprobarModal, setAprobarModal] = useState(null);
@@ -122,7 +123,18 @@ export default function Admin() {
     setCargandoPron(false);
   }
 
-  const filtrados = data.usuarios.filter(u => tab === 'Todos' ? true : u.estado === tab);
+  const filtrados = data.usuarios
+    .filter(u => tab === 'Todos' ? true : u.estado === tab)
+    .filter(u => {
+      const q = busqueda.trim().toLowerCase();
+      if (!q) return true;
+      return (
+        (u.nombre || '').toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q) ||
+        (u.usuario || '').toLowerCase().includes(q) ||
+        String(u.telefono || '').includes(q)
+      );
+    });
 
   return (
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -156,6 +168,14 @@ export default function Admin() {
             </div>
           ))}
         </div>
+
+        <input
+          type="text"
+          placeholder="🔍 Buscar por nombre, email, username o teléfono..."
+          value={busqueda}
+          onChange={e => setBusqueda(e.target.value)}
+          style={{ width: '100%', padding: 14, border: '1px solid #E0E0E0', borderRadius: 12, fontSize: 14, marginBottom: 16, boxSizing: 'border-box', background: 'white' }}
+        />
 
         <div style={{ background: 'white', borderRadius: 14, border: '1px solid #E0E0E0', overflow: 'hidden' }}>
           <div style={{ display: 'flex', borderBottom: '1px solid #E0E0E0' }}>
