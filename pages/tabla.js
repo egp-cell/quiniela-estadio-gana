@@ -106,7 +106,6 @@ export default function TablaLideres() {
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, color: COLORS.azulDetalle, fontSize: 14 }}>{q.nombreQuiniela}</div>
-                    <div style={{ fontSize: 12, color: '#888' }}>{q.nombreUsuario}</div>
                   </div>
                   <div style={{ textAlign: 'center', fontSize: 20, fontWeight: 900, color: COLORS.azulDetalle }}>{q.puntos}</div>
                   <div style={{ textAlign: 'center', fontSize: 14, color: COLORS.verdeExito, fontWeight: 700 }}>{q.exactos}</div>

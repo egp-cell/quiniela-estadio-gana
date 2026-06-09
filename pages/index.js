@@ -299,7 +299,6 @@ export default function Home() {
                       </div>
                       <div>
                         <div style={{ fontWeight: 700, color: COLORS.azulDetalle, fontSize: 13 }}>{q.nombreQuiniela}</div>
-                        <div style={{ fontSize: 11, color: '#888' }}>{q.nombreUsuario}</div>
                       </div>
                       <div style={{ textAlign: 'center', fontSize: 18, fontWeight: 900, color: COLORS.azulDetalle }}>{q.puntos}</div>
                     </div>

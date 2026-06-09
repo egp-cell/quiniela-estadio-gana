@@ -57,15 +57,20 @@ export default async function handler(req, res) {
 
     // Recalcular posiciones (por si hay empates, usa marcadores exactos como desempate)
     const ranking = activas
-      .map(q => ({
-        id: q.id,
-        nombreQuiniela: q.nombre,
-        nombreUsuario: q.usuarios.usuario || q.usuarios.nombre,
-        puntos: q.puntos || 0,
-        exactos: (estadisticas[q.id] && estadisticas[q.id].exactos) || 0,
-        aciertos: (estadisticas[q.id] && estadisticas[q.id].aciertos) || 0,
-        partidos_evaluados: (estadisticas[q.id] && estadisticas[q.id].partidos) || 0
-      }))
+      .map(q => {
+        const username = q.usuarios.usuario || q.usuarios.nombre;
+        const sufijoMatch = (q.nombre || '').match(/#\d+\s*$/);
+        const sufijo = sufijoMatch ? ' ' + sufijoMatch[0].trim() : '';
+        return {
+          id: q.id,
+          nombreQuiniela: username + sufijo,
+          nombreUsuario: username,
+          puntos: q.puntos || 0,
+          exactos: (estadisticas[q.id] && estadisticas[q.id].exactos) || 0,
+          aciertos: (estadisticas[q.id] && estadisticas[q.id].aciertos) || 0,
+          partidos_evaluados: (estadisticas[q.id] && estadisticas[q.id].partidos) || 0
+        };
+      })
       .sort((a, b) => {
         if (b.puntos !== a.puntos) return b.puntos - a.puntos;
         if (b.exactos !== a.exactos) return b.exactos - a.exactos;
