@@ -39,6 +39,11 @@ export default async function handler(req, res) {
         const { data: usuario } = await supabase.from('usuarios').select('*').eq('id', usuarioId).single();
         if (!usuario) return res.status(404).json({ exito: false, error: 'Usuario no encontrado' });
 
+        // Guarda contra doble aprobación: si ya está Activo, no crear quinielas nuevas
+        if (usuario.estado === 'Activo') {
+          return res.status(409).json({ exito: false, error: 'Este usuario ya fue aprobado. Si necesitas ajustar, elimina y vuelve a registrar.' });
+        }
+
         // Si no se especifica cantidadAprobada, usar la del registro original
         const cantidadFinal = cantidadAprobada !== undefined && cantidadAprobada !== null
           ? parseInt(cantidadAprobada)
