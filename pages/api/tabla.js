@@ -22,6 +22,7 @@ export default async function handler(req, res) {
         usuario_id,
         usuarios (
           nombre,
+          usuario,
           estado
         )
       `)
@@ -59,7 +60,7 @@ export default async function handler(req, res) {
       .map(q => ({
         id: q.id,
         nombreQuiniela: q.nombre,
-        nombreUsuario: q.usuarios.nombre,
+        nombreUsuario: q.usuarios.usuario || q.usuarios.nombre,
         puntos: q.puntos || 0,
         exactos: (estadisticas[q.id] && estadisticas[q.id].exactos) || 0,
         aciertos: (estadisticas[q.id] && estadisticas[q.id].aciertos) || 0,
