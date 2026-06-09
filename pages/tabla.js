@@ -6,11 +6,19 @@ export default function TablaLideres() {
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [usernameLogueado, setUsernameLogueado] = useState(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener('resize', check);
+    try {
+      const sesion = sessionStorage.getItem('quiniela_sesion');
+      if (sesion) {
+        const u = JSON.parse(sesion);
+        if (u && u.usuario) setUsernameLogueado(u.usuario.toLowerCase());
+      }
+    } catch (e) {}
     return () => window.removeEventListener('resize', check);
   }, []);
 
@@ -97,8 +105,9 @@ export default function TablaLideres() {
 
             {filtrado.map(q => {
               const colores = colorPosicion(q.posicion);
+              const esMio = usernameLogueado && q.nombreUsuario && q.nombreUsuario.toLowerCase() === usernameLogueado;
               return (
-                <div key={q.id} style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px 70px 70px', padding: '14px 16px', borderBottom: '1px solid #F0F2F5', alignItems: 'center' }}>
+                <div key={q.id} style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px 70px 70px', padding: '14px 16px', borderBottom: '1px solid #F0F2F5', alignItems: 'center', background: esMio ? '#FFF9E6' : 'transparent', borderLeft: esMio ? `4px solid ${COLORS.dorado}` : '4px solid transparent' }}>
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: '50%', background: colores.bg, color: colores.text, fontWeight: 800, fontSize: 13 }}>
                       {colores.emoji || `#${q.posicion}`}
