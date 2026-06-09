@@ -7,6 +7,8 @@ export default function Admin() {
   const [accesos, setAccesos] = useState(null);
   const [verAccesos, setVerAccesos] = useState(null);
   const [aprobarModal, setAprobarModal] = useState(null);
+  const [pronosticosModal, setPronosticosModal] = useState(null);
+  const [cargandoPron, setCargandoPron] = useState(false);
   const [cantidadAprobar, setCantidadAprobar] = useState(1);
   const [cargando, setCargando] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -99,6 +101,25 @@ export default function Admin() {
     const d = await r.json();
     if (d.exito) cargar();
     else alert('Error: ' + d.error);
+  }
+
+  async function verPronosticos(u) {
+    setCargandoPron(true);
+    setPronosticosModal({ cargando: true, usuario: u });
+    try {
+      const r = await fetch(`/api/admin-pronosticos?usuarioId=${u.id}`);
+      const d = await r.json();
+      if (d.exito) {
+        setPronosticosModal({ ...d });
+      } else {
+        alert('Error: ' + d.error);
+        setPronosticosModal(null);
+      }
+    } catch (e) {
+      alert('Error de conexión');
+      setPronosticosModal(null);
+    }
+    setCargandoPron(false);
   }
 
   const filtrados = data.usuarios.filter(u => tab === 'Todos' ? true : u.estado === tab);
@@ -198,6 +219,7 @@ export default function Admin() {
                       {u.estado === 'Activo' && (
                         <>
                           <button onClick={() => setVerAccesos(u)} style={{ padding: '6px 12px', background: COLORS.primario, color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginRight: 6, fontWeight: 600, fontSize: 12 }}>🔑 Ver accesos</button>
+                          <button onClick={() => verPronosticos(u)} style={{ padding: '6px 12px', background: COLORS.azulDetalle, color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginRight: 6, fontWeight: 600, fontSize: 12 }}>👁 Pronósticos</button>
                           <button onClick={() => toggleCortesia(u)} style={{
                             padding: '6px 12px',
                             background: u.es_cortesia ? '#EF9F27' : '#F0F2F5',
@@ -294,6 +316,74 @@ export default function Admin() {
 
             <a href={`https://wa.me/52${accesos.telefono}?text=${encodeURIComponent(`Hola ${accesos.nombre}! Tu pago de la Quiniela Estadio Gana fue confirmado (${accesos.cantidad} ${accesos.cantidad === 1 ? 'quiniela' : 'quinielas'}). Tus accesos:\n\nUsuario: ${accesos.usuario}\nPassword: ${accesos.password}\n\nIngresa a https://quiniela.estadiogana.mx para hacer tus pronósticos. ¡Suerte!`)}`} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: 14, background: '#25D366', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 700, marginBottom: 8 }}>📱 Enviar por WhatsApp</a>
             <button onClick={() => setAccesos(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
+          </div>
+        </div>
+      )}
+
+      {pronosticosModal && (
+        <div onClick={() => setPronosticosModal(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 800, width: '100%', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ padding: '24px 28px 16px', borderBottom: '1px solid #E0E0E0' }}>
+              <div style={{ fontSize: 11, color: '#888', letterSpacing: 2, fontWeight: 700 }}>PRONÓSTICOS</div>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: COLORS.azulDetalle, margin: '4px 0 0' }}>{pronosticosModal.usuario?.nombre}</h2>
+              {pronosticosModal.usuario?.usuario && <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>@{pronosticosModal.usuario.usuario}</div>}
+            </div>
+            <div style={{ overflowY: 'auto', padding: 20, flex: 1 }}>
+              {pronosticosModal.cargando ? (
+                <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>Cargando pronósticos...</div>
+              ) : (pronosticosModal.quinielas || []).length === 0 ? (
+                <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>Este usuario no tiene quinielas</div>
+              ) : (
+                (pronosticosModal.quinielas || []).map(q => {
+                  const pronDeEstaQ = (pronosticosModal.pronosticos || []).filter(p => p.quiniela_id === q.id);
+                  const indexPron = {};
+                  pronDeEstaQ.forEach(p => { indexPron[p.partido_id] = p; });
+                  return (
+                    <div key={q.id} style={{ marginBottom: 24, border: '1px solid #E0E0E0', borderRadius: 12, overflow: 'hidden' }}>
+                      <div style={{ background: COLORS.fondoNeutro, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ fontWeight: 800, color: COLORS.azulDetalle }}>{q.nombre}</div>
+                        <div style={{ fontSize: 12, color: '#666' }}>
+                          {pronDeEstaQ.length} de {(pronosticosModal.partidos || []).length} pronosticados · {q.puntos || 0} pts
+                          {q.posicion ? ` · #${q.posicion}` : ''}
+                        </div>
+                      </div>
+                      {(pronosticosModal.partidos || []).filter(p => indexPron[p.id]).length === 0 ? (
+                        <div style={{ padding: 20, textAlign: 'center', color: '#888', fontSize: 13 }}>Sin pronósticos</div>
+                      ) : (
+                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                          <thead>
+                            <tr style={{ background: 'white', borderBottom: '1px solid #E0E0E0' }}>
+                              <th style={{ padding: 10, textAlign: 'left', fontSize: 11, color: '#666', textTransform: 'uppercase' }}>Partido</th>
+                              <th style={{ padding: 10, textAlign: 'center', fontSize: 11, color: '#666', textTransform: 'uppercase' }}>Pronóstico</th>
+                              <th style={{ padding: 10, textAlign: 'center', fontSize: 11, color: '#666', textTransform: 'uppercase' }}>Resultado</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(pronosticosModal.partidos || []).filter(p => indexPron[p.id]).map(p => {
+                              const pr = indexPron[p.id];
+                              const tieneRes = p.goles_local !== null && p.goles_visitante !== null;
+                              return (
+                                <tr key={p.id} style={{ borderTop: '1px solid #F0F2F5' }}>
+                                  <td style={{ padding: 10 }}>
+                                    <div style={{ fontWeight: 600 }}>{p.local} vs {p.visitante}</div>
+                                    <div style={{ fontSize: 11, color: '#888' }}>{p.fase}{p.grupo ? ` · Grupo ${p.grupo}` : ''}</div>
+                                  </td>
+                                  <td style={{ padding: 10, textAlign: 'center', fontWeight: 800, color: COLORS.azulDetalle }}>{pr.goles_local} - {pr.goles_visitante}</td>
+                                  <td style={{ padding: 10, textAlign: 'center', fontWeight: 800, color: tieneRes ? COLORS.verdeExito : '#888' }}>{tieneRes ? `${p.goles_local} - ${p.goles_visitante}` : '—'}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+            <div style={{ padding: 16, borderTop: '1px solid #E0E0E0' }}>
+              <button onClick={() => setPronosticosModal(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cerrar</button>
+            </div>
           </div>
         </div>
       )}
