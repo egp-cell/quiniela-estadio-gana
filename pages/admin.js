@@ -135,6 +135,7 @@ export default function Admin() {
           </a>
           <h1 style={{ fontSize: 22, fontWeight: 800, flex: 1 }}>⚙️ Panel Admin · Quiniela Estadio Gana</h1>
           <div style={{ display: 'flex', gap: 8 }}>
+            <a href="/api/admin-exportar-pronosticos" style={{ padding: '8px 16px', background: COLORS.azulDetalle, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13 }}>📥 Descargar pronósticos</a>
             <a href="/admin/resultados" style={{ padding: '8px 16px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13 }}>⚽ Capturar resultados</a>
             <button onClick={cargar} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>🔄 Refrescar</button>
           </div>
