@@ -72,17 +72,29 @@ export default async function handler(req, res) {
           fecha_confirmacion: new Date().toISOString()
         }).eq('usuario_id', usuarioId);
 
-        // Crear las N quinielas (solo las pagadas)
-        const quinielas = [];
-        for (let i = 1; i <= cantidadFinal; i++) {
-          quinielas.push({
-            usuario_id: usuarioId,
-            nombre: cantidadFinal > 1 ? `${usuario.nombre} #${i}` : usuario.nombre,
-            estado: 'Pagada',
-            puntos: 0
-          });
+        // INSERT idempotente: contar las quinielas que ya existen para este usuario
+        // y solo crear las que falten para llegar a cantidadFinal. Defensa en
+        // profundidad contra dobles llamadas, además de la guarda de estado.
+        const { count: existentes } = await supabase
+          .from('quinielas')
+          .select('id', { count: 'exact', head: true })
+          .eq('usuario_id', usuarioId);
+
+        const yaTiene = existentes || 0;
+        const faltan = cantidadFinal - yaTiene;
+
+        if (faltan > 0) {
+          const quinielas = [];
+          for (let i = yaTiene + 1; i <= cantidadFinal; i++) {
+            quinielas.push({
+              usuario_id: usuarioId,
+              nombre: cantidadFinal > 1 ? `${usuario.nombre} #${i}` : usuario.nombre,
+              estado: 'Pagada',
+              puntos: 0
+            });
+          }
+          await supabase.from('quinielas').insert(quinielas);
         }
-        await supabase.from('quinielas').insert(quinielas);
 
         return res.status(200).json({
           exito: true,

@@ -11,6 +11,7 @@ export default function Admin() {
   const [pronosticosModal, setPronosticosModal] = useState(null);
   const [cargandoPron, setCargandoPron] = useState(false);
   const [cantidadAprobar, setCantidadAprobar] = useState(1);
+  const [aprobando, setAprobando] = useState(false);
   const [cargando, setCargando] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -42,23 +43,32 @@ export default function Admin() {
   }
 
   async function confirmarAprobar() {
-    if (!aprobarModal) return;
-    const r = await fetch('/api/admin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        accion: 'aprobar',
-        usuarioId: aprobarModal.id,
-        cantidadAprobada: cantidadAprobar
-      })
-    });
-    const d = await r.json();
-    if (d.exito) {
-      setAprobarModal(null);
-      setAccesos(d);
-      cargar();
-    } else {
-      alert('Error: ' + d.error);
+    if (!aprobarModal || aprobando) return;
+    setAprobando(true);
+    try {
+      const r = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          accion: 'aprobar',
+          usuarioId: aprobarModal.id,
+          cantidadAprobada: cantidadAprobar
+        })
+      });
+      const d = await r.json();
+      if (d.exito) {
+        setAprobarModal(null);
+        setAccesos(d);
+        cargar();
+        // No reactivamos: el modal se cierra, queda listo para próxima vez
+        setAprobando(false);
+      } else {
+        alert('Error: ' + d.error);
+        setAprobando(false);
+      }
+    } catch (e) {
+      alert('Error de conexión');
+      setAprobando(false);
     }
   }
 
@@ -292,7 +302,7 @@ export default function Admin() {
               </div>
             )}
 
-            <button onClick={confirmarAprobar} style={{ width: '100%', padding: 14, background: COLORS.verdeExito, color: 'white', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer', marginBottom: 8, fontSize: 14 }}>✓ Aprobar {cantidadAprobar} {cantidadAprobar === 1 ? 'quiniela' : 'quinielas'}</button>
+            <button onClick={confirmarAprobar} disabled={aprobando} style={{ width: '100%', padding: 14, background: aprobando ? '#9CA3AF' : COLORS.verdeExito, color: 'white', border: 'none', borderRadius: 10, fontWeight: 700, cursor: aprobando ? 'not-allowed' : 'pointer', marginBottom: 8, fontSize: 14 }}>{aprobando ? 'Aprobando…' : `✓ Aprobar ${cantidadAprobar} ${cantidadAprobar === 1 ? 'quiniela' : 'quinielas'}`}</button>
             <button onClick={() => setAprobarModal(null)} style={{ width: '100%', padding: 12, background: '#F0F2F5', color: '#666', border: 'none', borderRadius: 10, cursor: 'pointer', fontWeight: 600 }}>Cancelar</button>
           </div>
         </div>
