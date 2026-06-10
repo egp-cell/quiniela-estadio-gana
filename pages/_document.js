@@ -10,7 +10,7 @@ export default function Document() {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Estadio Gana" />
+        <meta name="apple-mobile-web-app-title" content="Quiniela Estadio Gana" />
       </Head>
       <body>
         <Main />
