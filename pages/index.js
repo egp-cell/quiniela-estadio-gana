@@ -100,11 +100,11 @@ export default function Home() {
         <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
           <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
         </a>
-        <div style={{ display: 'flex', gap: isMobile ? 6 : 10, flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <button onClick={() => setReglamento(true)} style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>📖 {isMobile ? 'Reglas' : 'Reglamento'}</button>
-         <button onClick={() => setTablaModal(true)} style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>🏆 Tabla</button>
-          <a href="#registro" style={{ padding: isMobile ? '6px 10px' : '8px 18px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap' }}>Inscribirme</a>
-          <a href="/jugar" style={{ padding: isMobile ? '8px 16px' : '10px 22px', background: COLORS.verdeExito, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: isMobile ? 12 : 14, boxShadow: '0 4px 12px rgba(29,158,117,0.4)', whiteSpace: 'nowrap' }}>🔐 Log In</a>
+        <div style={{ display: 'flex', gap: isMobile ? 5 : 10, flex: 1, justifyContent: 'flex-end', alignItems: 'center', overflowX: isMobile ? 'auto' : 'visible', WebkitOverflowScrolling: 'touch', minWidth: 0 }}>
+          <button onClick={() => setReglamento(true)} style={{ padding: isMobile ? '6px 8px' : '8px 18px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap', flexShrink: 0 }}>📖 {isMobile ? 'Reglas' : 'Reglamento'}</button>
+         <button onClick={() => setTablaModal(true)} style={{ padding: isMobile ? '6px 8px' : '8px 18px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap', flexShrink: 0 }}>🏆 Tabla</button>
+          <a href="#registro" style={{ padding: isMobile ? '6px 8px' : '8px 18px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: isMobile ? 11 : 13, whiteSpace: 'nowrap', flexShrink: 0 }}>Inscribirme</a>
+          <a href="/jugar" style={{ padding: isMobile ? '6px 10px' : '10px 22px', background: COLORS.verdeExito, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: isMobile ? 12 : 14, boxShadow: '0 4px 12px rgba(29,158,117,0.4)', whiteSpace: 'nowrap', flexShrink: 0 }}>🔐 Login</a>
         </div>
       </div>
 

@@ -150,21 +150,23 @@ export default function Admin() {
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-          <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
-            <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
-          </a>
-          <h1 style={{ fontSize: 22, fontWeight: 800, flex: 1 }}>⚙️ Panel Admin · Quiniela Estadio Gana</h1>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <a href="/api/admin-exportar-pronosticos" style={{ padding: '8px 16px', background: COLORS.azulDetalle, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13 }}>📥 Descargar pronósticos</a>
-            <a href="/admin/resultados" style={{ padding: '8px 16px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13 }}>⚽ Capturar resultados</a>
-            <button onClick={cargar} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>🔄 Refrescar</button>
+      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: isMobile ? '14px 14px' : '20px 30px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'center', gap: isMobile ? 10 : 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
+              <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
+            </a>
+            <h1 style={{ fontSize: isMobile ? 16 : 22, fontWeight: 800, flex: 1, lineHeight: 1.2 }}>⚙️ Panel Admin{isMobile ? '' : ' · Quiniela Estadio Gana'}</h1>
+          </div>
+          <div style={{ display: 'flex', gap: 8, overflowX: isMobile ? 'auto' : 'visible', paddingBottom: isMobile ? 4 : 0, WebkitOverflowScrolling: 'touch' }}>
+            <a href="/api/admin-exportar-pronosticos" style={{ padding: '8px 14px', background: COLORS.azulDetalle, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0 }}>📥 {isMobile ? 'Descargar' : 'Descargar pronósticos'}</a>
+            <a href="/admin/resultados" style={{ padding: '8px 14px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0 }}>⚽ {isMobile ? 'Resultados' : 'Capturar resultados'}</a>
+            <button onClick={cargar} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>🔄</button>
           </div>
         </div>
       </header>
 
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: 30, flex: 1, width: '100%', boxSizing: 'border-box' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: isMobile ? 14 : 30, flex: 1, width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 30 }}>
           {[
             ['Registrados', data.stats.registrados, COLORS.azulDetalle],
@@ -207,7 +209,8 @@ export default function Admin() {
           ) : filtrados.length === 0 ? (
             <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>No hay usuarios en esta categoría</div>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: isMobile ? 700 : 'auto' }}>
               <thead>
                 <tr style={{ background: COLORS.fondoNeutro }}>
                   <th style={{ padding: 12, textAlign: 'left', fontSize: 12, color: '#666', textTransform: 'uppercase' }}>Nombre</th>
@@ -268,13 +271,14 @@ export default function Admin() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
         </div>
       </div>
 
       {aprobarModal && (
         <div onClick={() => setAprobarModal(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: 36 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: isMobile ? 22 : 36, maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ fontSize: 48, color: COLORS.verdeExito, textAlign: 'center', marginBottom: 12 }}>✓</div>
             <h2 style={{ fontSize: 22, fontWeight: 800, color: COLORS.azulDetalle, textAlign: 'center', marginBottom: 8 }}>Aprobar inscripción</h2>
             <p style={{ color: '#666', textAlign: 'center', marginBottom: 8, fontSize: 14 }}>{aprobarModal.nombre} se inscribió con</p>
@@ -310,7 +314,7 @@ export default function Admin() {
 
       {verAccesos && (
         <div onClick={() => setVerAccesos(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: 36 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: isMobile ? 22 : 36, maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ fontSize: 48, color: COLORS.primario, textAlign: 'center', marginBottom: 12 }}>🔑</div>
             <h2 style={{ fontSize: 22, fontWeight: 800, color: COLORS.azulDetalle, textAlign: 'center', marginBottom: 8 }}>Accesos de {verAccesos.nombre}</h2>
             <p style={{ color: '#666', textAlign: 'center', marginBottom: 20, fontSize: 13 }}>{verAccesos.email}</p>
@@ -332,7 +336,7 @@ export default function Admin() {
 
       {accesos && (
         <div onClick={() => setAccesos(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: 36 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 500, width: '100%', padding: isMobile ? 22 : 36, maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ fontSize: 48, color: COLORS.verdeExito, textAlign: 'center', marginBottom: 12 }}>✓</div>
             <h2 style={{ fontSize: 22, fontWeight: 800, color: COLORS.azulDetalle, textAlign: 'center', marginBottom: 8 }}>Pago aprobado</h2>
             <p style={{ color: '#666', textAlign: 'center', marginBottom: 8 }}>Comparte estos accesos con {accesos.nombre} por WhatsApp</p>
@@ -354,12 +358,12 @@ export default function Admin() {
       {pronosticosModal && (
         <div onClick={() => setPronosticosModal(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 20, maxWidth: 800, width: '100%', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ padding: '24px 28px 16px', borderBottom: '1px solid #E0E0E0' }}>
+            <div style={{ padding: isMobile ? '18px 18px 12px' : '24px 28px 16px', borderBottom: '1px solid #E0E0E0' }}>
               <div style={{ fontSize: 11, color: '#888', letterSpacing: 2, fontWeight: 700 }}>PRONÓSTICOS</div>
               <h2 style={{ fontSize: 22, fontWeight: 800, color: COLORS.azulDetalle, margin: '4px 0 0' }}>{pronosticosModal.usuario?.nombre}</h2>
               {pronosticosModal.usuario?.usuario && <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>@{pronosticosModal.usuario.usuario}</div>}
             </div>
-            <div style={{ overflowY: 'auto', padding: 20, flex: 1 }}>
+            <div style={{ overflowY: 'auto', padding: isMobile ? 12 : 20, flex: 1 }}>
               {pronosticosModal.cargando ? (
                 <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>Cargando pronósticos...</div>
               ) : (pronosticosModal.quinielas || []).length === 0 ? (
@@ -381,7 +385,8 @@ export default function Admin() {
                       {(pronosticosModal.partidos || []).filter(p => indexPron[p.id]).length === 0 ? (
                         <div style={{ padding: 20, textAlign: 'center', color: '#888', fontSize: 13 }}>Sin pronósticos</div>
                       ) : (
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: isMobile ? 420 : 'auto' }}>
                           <thead>
                             <tr style={{ background: 'white', borderBottom: '1px solid #E0E0E0' }}>
                               <th style={{ padding: 10, textAlign: 'left', fontSize: 11, color: '#666', textTransform: 'uppercase' }}>Partido</th>
@@ -406,6 +411,7 @@ export default function Admin() {
                             })}
                           </tbody>
                         </table>
+                        </div>
                       )}
                     </div>
                   );

@@ -53,23 +53,23 @@ export default function TablaLideres() {
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '24px 30px' }}>
+      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: isMobile ? '14px 14px' : '24px 30px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: isMobile ? 8 : 12 }}>
             <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
               <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
             </a>
-            <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none' }}>← Volver a mis quinielas</a>
-            <button onClick={cargar} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>🔄 Actualizar</button>
+            <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: isMobile ? 12 : 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>← {isMobile ? 'Quinielas' : 'Volver a mis quinielas'}</a>
+            <button onClick={cargar} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>🔄</button>
           </div>
-          <h1 style={{ fontSize: 28, fontWeight: 900, margin: 0 }}>🏆 Tabla de Líderes</h1>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.9)', margin: '4px 0 0 0' }}>
-            {ranking.length} quinielas activas · Actualización automática cada 30s
+          <h1 style={{ fontSize: isMobile ? 22 : 28, fontWeight: 900, margin: 0 }}>🏆 Tabla de Líderes</h1>
+          <p style={{ fontSize: isMobile ? 11 : 13, color: 'rgba(255,255,255,0.9)', margin: '4px 0 0 0' }}>
+            {ranking.length} quinielas activas · Actualización cada 30s
           </p>
         </div>
       </header>
 
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: 24, flex: 1, width: '100%', boxSizing: 'border-box' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: isMobile ? 12 : 24, flex: 1, width: '100%', boxSizing: 'border-box' }}>
 
         <input
           type="text"
@@ -95,7 +95,7 @@ export default function TablaLideres() {
           </div>
         ) : (
           <div style={{ background: 'white', borderRadius: 14, overflow: 'hidden', border: '1px solid #E0E0E0' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px 70px 70px', padding: '12px 16px', background: COLORS.fondoNeutro, fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '44px 1fr 50px 46px 46px' : '60px 1fr 80px 70px 70px', padding: isMobile ? '10px 10px' : '12px 16px', background: COLORS.fondoNeutro, fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #E0E0E0' }}>
               <div style={{ textAlign: 'center' }}>Pos</div>
               <div>Quiniela</div>
               <div style={{ textAlign: 'center' }}>Pts</div>
@@ -107,9 +107,9 @@ export default function TablaLideres() {
               const colores = colorPosicion(q.posicion);
               const esMio = usernameLogueado && q.nombreUsuario && q.nombreUsuario.toLowerCase() === usernameLogueado;
               return (
-                <div key={q.id} style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px 70px 70px', padding: '14px 16px', borderBottom: '1px solid #F0F2F5', alignItems: 'center', background: esMio ? '#FFF9E6' : 'transparent', borderLeft: esMio ? `4px solid ${COLORS.dorado}` : '4px solid transparent' }}>
+                <div key={q.id} style={{ display: 'grid', gridTemplateColumns: isMobile ? '44px 1fr 50px 46px 46px' : '60px 1fr 80px 70px 70px', padding: isMobile ? '12px 10px' : '14px 16px', borderBottom: '1px solid #F0F2F5', alignItems: 'center', background: esMio ? '#FFF9E6' : 'transparent', borderLeft: esMio ? `4px solid ${COLORS.dorado}` : '4px solid transparent' }}>
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: '50%', background: colores.bg, color: colores.text, fontWeight: 800, fontSize: 13 }}>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: isMobile ? 30 : 36, height: isMobile ? 30 : 36, borderRadius: '50%', background: colores.bg, color: colores.text, fontWeight: 800, fontSize: isMobile ? 11 : 13 }}>
                       {colores.emoji || `#${q.posicion}`}
                     </div>
                   </div>

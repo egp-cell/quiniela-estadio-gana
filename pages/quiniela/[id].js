@@ -206,22 +206,22 @@ export default function PronosticosQuiniela() {
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px', position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: isMobile ? '14px 14px' : '20px 30px', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: isMobile ? 10 : 16 }}>
           <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
             <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
           </a>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
-              <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none' }}>← Mis quinielas</a>
-              <a href="/tabla" style={{ padding: '10px 20px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: 14, boxShadow: '0 3px 10px rgba(205,35,44,0.4)' }}>🏆 Ver Tabla</a>
+              <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>← {isMobile ? 'Volver' : 'Mis quinielas'}</a>
+              <a href="/tabla" style={{ padding: isMobile ? '6px 12px' : '10px 20px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: isMobile ? 12 : 14, boxShadow: '0 3px 10px rgba(205,35,44,0.4)', whiteSpace: 'nowrap' }}>🏆 {isMobile ? 'Tabla' : 'Ver Tabla'}</a>
             </div>
-            <h1 style={{ fontSize: 22, fontWeight: 800, marginTop: 4 }}>{data.quiniela?.nombre || 'Quiniela'}</h1>
-            <div style={{ fontSize: 13, opacity: 0.9, marginTop: 2 }}>
+            <h1 style={{ fontSize: isMobile ? 16 : 22, fontWeight: 800, marginTop: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{data.quiniela?.nombre || 'Quiniela'}</h1>
+            <div style={{ fontSize: isMobile ? 11 : 13, opacity: 0.9, marginTop: 2 }}>
               {totalPronosticados} de {data.partidos.length} partidos pronosticados
             </div>
           </div>
-          <button onClick={logout} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>Salir</button>
+          <button onClick={logout} style={{ padding: isMobile ? '6px 12px' : '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 12 : 14, whiteSpace: 'nowrap' }}>Salir</button>
         </div>
       </header>
 
@@ -267,7 +267,7 @@ export default function PronosticosQuiniela() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 800, margin: '0 auto', padding: '30px 20px', flex: 1, width: '100%', boxSizing: 'border-box' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: isMobile ? '20px 12px' : '30px 20px', flex: 1, width: '100%', boxSizing: 'border-box' }}>
         {partidosDelDia.length === 0 ? (
           <div style={{ textAlign: 'center', color: '#888', padding: 40 }}>No hay partidos en este día</div>
         ) : (
@@ -280,25 +280,25 @@ export default function PronosticosQuiniela() {
               <div key={p.id} style={{
                 background: 'white',
                 borderRadius: 14,
-                padding: 20,
+                padding: isMobile ? 14 : 20,
                 marginBottom: 12,
                 border: '1px solid #E0E0E0',
                 opacity: empezado ? 0.6 : 1
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14, fontSize: 12, color: '#888' }}>
                   <span>{p.fase}{p.grupo ? ` · Grupo ${p.grupo}` : ''}</span>
-                  <span>{formatearHora(p.fecha_hora)}{empezado ? ' · 🔒 Bloqueado' : ''}</span>
+                  <span>{formatearHora(p.fecha_hora)}{empezado ? ' · 🔒' : ''}</span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 12, alignItems: 'center' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr auto 1fr' : '1fr auto 1fr', gap: isMobile ? 6 : 12, alignItems: 'center' }}>
                   {/* Local */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-end' }}>
-                    <span style={{ fontWeight: 600, textAlign: 'right', fontSize: 14 }}>{p.local}</span>
-                    {BANDERAS[p.local] && <img src={`https://flagcdn.com/w80/${BANDERAS[p.local]}.png`} style={{ width: 32, height: 22, borderRadius: 3, flexShrink: 0 }} />}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 6 : 10, justifyContent: 'flex-end', minWidth: 0 }}>
+                    <span style={{ fontWeight: 600, textAlign: 'right', fontSize: isMobile ? 12 : 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.local}</span>
+                    {BANDERAS[p.local] && <img src={`https://flagcdn.com/w80/${BANDERAS[p.local]}.png`} style={{ width: isMobile ? 24 : 32, height: isMobile ? 16 : 22, borderRadius: 3, flexShrink: 0 }} />}
                   </div>
 
                   {/* Inputs */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 4 : 6 }}>
                     <input
                       type="number"
                       min="0"
@@ -307,14 +307,16 @@ export default function PronosticosQuiniela() {
                       value={pron.goles_local !== undefined ? pron.goles_local : ''}
                       onChange={e => cambiarPronostico(p.id, 'local', e.target.value)}
                       style={{
-                        width: 50,
-                        height: 50,
+                        width: isMobile ? 42 : 50,
+                        height: isMobile ? 42 : 50,
                         textAlign: 'center',
-                        fontSize: 22,
+                        fontSize: isMobile ? 18 : 22,
                         fontWeight: 800,
                         border: '2px solid ' + (estadoGuardado === 'guardado' ? COLORS.verdeExito : estadoGuardado === 'error' ? '#E04444' : '#E0E0E0'),
                         borderRadius: 10,
-                        background: empezado ? '#F0F2F5' : 'white'
+                        background: empezado ? '#F0F2F5' : 'white',
+                        padding: 0,
+                        boxSizing: 'border-box'
                       }}
                     />
                     <span style={{ fontSize: 16, fontWeight: 700, color: '#888' }}>-</span>
@@ -326,22 +328,24 @@ export default function PronosticosQuiniela() {
                       value={pron.goles_visitante !== undefined ? pron.goles_visitante : ''}
                       onChange={e => cambiarPronostico(p.id, 'visitante', e.target.value)}
                       style={{
-                        width: 50,
-                        height: 50,
+                        width: isMobile ? 42 : 50,
+                        height: isMobile ? 42 : 50,
                         textAlign: 'center',
-                        fontSize: 22,
+                        fontSize: isMobile ? 18 : 22,
                         fontWeight: 800,
                         border: '2px solid ' + (estadoGuardado === 'guardado' ? COLORS.verdeExito : estadoGuardado === 'error' ? '#E04444' : '#E0E0E0'),
                         borderRadius: 10,
-                        background: empezado ? '#F0F2F5' : 'white'
+                        background: empezado ? '#F0F2F5' : 'white',
+                        padding: 0,
+                        boxSizing: 'border-box'
                       }}
                     />
                   </div>
 
                   {/* Visitante */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    {BANDERAS[p.visitante] && <img src={`https://flagcdn.com/w80/${BANDERAS[p.visitante]}.png`} style={{ width: 32, height: 22, borderRadius: 3, flexShrink: 0 }} />}
-                    <span style={{ fontWeight: 600, fontSize: 14 }}>{p.visitante}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 6 : 10, minWidth: 0 }}>
+                    {BANDERAS[p.visitante] && <img src={`https://flagcdn.com/w80/${BANDERAS[p.visitante]}.png`} style={{ width: isMobile ? 24 : 32, height: isMobile ? 16 : 22, borderRadius: 3, flexShrink: 0 }} />}
+                    <span style={{ fontWeight: 600, fontSize: isMobile ? 12 : 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.visitante}</span>
                   </div>
                 </div>
 

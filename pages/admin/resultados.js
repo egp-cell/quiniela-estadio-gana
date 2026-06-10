@@ -132,20 +132,20 @@ async function borrarResultado(partidoId) {
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+      <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: isMobile ? '14px 14px' : '20px 30px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: isMobile ? 10 : 16 }}>
           <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
             <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
           </a>
-          <div style={{ flex: 1 }}>
-            <a href="/admin" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none' }}>← Panel admin</a>
-            <h1 style={{ fontSize: 22, fontWeight: 800, marginTop: 4 }}>⚽ Capturar resultados</h1>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <a href="/admin" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none' }}>← {isMobile ? 'Admin' : 'Panel admin'}</a>
+            <h1 style={{ fontSize: isMobile ? 16 : 22, fontWeight: 800, marginTop: 4 }}>⚽ {isMobile ? 'Resultados' : 'Capturar resultados'}</h1>
           </div>
-          <button onClick={cargar} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>🔄 Refrescar</button>
+          <button onClick={cargar} style={{ padding: isMobile ? '6px 12px' : '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>🔄</button>
         </div>
       </header>
 
-      <div style={{ maxWidth: 1000, margin: '0 auto', padding: 30, flex: 1, width: '100%', boxSizing: 'border-box' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto', padding: isMobile ? 14 : 30, flex: 1, width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
           {[
             ['todos', 'Todos'],
@@ -173,18 +173,18 @@ async function borrarResultado(partidoId) {
 
             return (
               <div key={p.id} style={{
-                background: 'white', borderRadius: 14, padding: 18, marginBottom: 10,
+                background: 'white', borderRadius: 14, padding: isMobile ? 14 : 18, marginBottom: 10,
                 border: finalizado ? `2px solid ${COLORS.verdeExito}` : '1px solid #E0E0E0'
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12, fontSize: 12, color: '#888' }}>
-                  <span>{p.fase}{p.grupo ? ` · Grupo ${p.grupo}` : ''}</span>
-                  <span>{formatearFecha(p.fecha_hora)} {finalizado && '· ✓ Finalizado'}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12, fontSize: 11, color: '#888', gap: 8 }}>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.fase}{p.grupo ? ` · G${p.grupo}` : ''}</span>
+                  <span style={{ whiteSpace: 'nowrap' }}>{formatearFecha(p.fecha_hora)} {finalizado && '· ✓'}</span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto', gap: 12, alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-                    <span style={{ fontWeight: 600, fontSize: 14 }}>{p.local || 'Por definir'}</span>
-                    {BANDERAS[p.local] && <img src={`https://flagcdn.com/w40/${BANDERAS[p.local]}.png`} style={{ width: 24, height: 16, borderRadius: 2 }} />}
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr auto 1fr' : '1fr auto 1fr auto', gap: isMobile ? 6 : 12, alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 6 : 8, justifyContent: 'flex-end', minWidth: 0 }}>
+                    <span style={{ fontWeight: 600, fontSize: isMobile ? 12 : 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.local || 'Por definir'}</span>
+                    {BANDERAS[p.local] && <img src={`https://flagcdn.com/w40/${BANDERAS[p.local]}.png`} style={{ width: isMobile ? 20 : 24, height: isMobile ? 14 : 16, borderRadius: 2, flexShrink: 0 }} />}
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -192,23 +192,23 @@ async function borrarResultado(partidoId) {
                       type="number" min="0" max="20"
                       value={r.gl !== undefined ? r.gl : ''}
                       onChange={e => setResultados({ ...resultados, [p.id]: { ...r, gl: e.target.value } })}
-                      style={{ width: 50, height: 40, textAlign: 'center', fontSize: 18, fontWeight: 800, border: '2px solid #E0E0E0', borderRadius: 8 }}
+                      style={{ width: isMobile ? 40 : 50, height: 40, textAlign: 'center', fontSize: isMobile ? 16 : 18, fontWeight: 800, border: '2px solid #E0E0E0', borderRadius: 8, padding: 0, boxSizing: 'border-box' }}
                     />
                     <span style={{ fontSize: 16, color: '#888' }}>-</span>
                     <input
                       type="number" min="0" max="20"
                       value={r.gv !== undefined ? r.gv : ''}
                       onChange={e => setResultados({ ...resultados, [p.id]: { ...r, gv: e.target.value } })}
-                      style={{ width: 50, height: 40, textAlign: 'center', fontSize: 18, fontWeight: 800, border: '2px solid #E0E0E0', borderRadius: 8 }}
+                      style={{ width: isMobile ? 40 : 50, height: 40, textAlign: 'center', fontSize: isMobile ? 16 : 18, fontWeight: 800, border: '2px solid #E0E0E0', borderRadius: 8, padding: 0, boxSizing: 'border-box' }}
                     />
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    {BANDERAS[p.visitante] && <img src={`https://flagcdn.com/w40/${BANDERAS[p.visitante]}.png`} style={{ width: 24, height: 16, borderRadius: 2 }} />}
-                    <span style={{ fontWeight: 600, fontSize: 14 }}>{p.visitante || 'Por definir'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 6 : 8, minWidth: 0 }}>
+                    {BANDERAS[p.visitante] && <img src={`https://flagcdn.com/w40/${BANDERAS[p.visitante]}.png`} style={{ width: isMobile ? 20 : 24, height: isMobile ? 14 : 16, borderRadius: 2, flexShrink: 0 }} />}
+                    <span style={{ fontWeight: 600, fontSize: isMobile ? 12 : 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.visitante || 'Por definir'}</span>
                   </div>
 
-                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                 <div style={{ display: isMobile ? 'flex' : 'flex', flexDirection: isMobile ? 'row' : 'column', gap: isMobile ? 6 : 4, gridColumn: isMobile ? '1 / -1' : 'auto', marginTop: isMobile ? 10 : 0 }}>
                     <button
                       onClick={() => capturar(p.id)}
                       disabled={guardando[p.id]}
@@ -216,7 +216,8 @@ async function borrarResultado(partidoId) {
                         padding: '8px 14px',
                         background: finalizado ? '#EF9F27' : COLORS.verdeExito,
                         color: 'white', border: 'none', borderRadius: 8,
-                        cursor: 'pointer', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap'
+                        cursor: 'pointer', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap',
+                        flex: isMobile ? 1 : 'initial'
                       }}
                     >
                       {guardando[p.id] ? '...' : (finalizado ? '✓ Recalcular' : 'Guardar')}
@@ -229,7 +230,8 @@ async function borrarResultado(partidoId) {
                           padding: '8px 14px',
                           background: '#FFE5E5',
                           color: '#C62828', border: '1px solid #FFCDD2', borderRadius: 8,
-                          cursor: 'pointer', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap'
+                          cursor: 'pointer', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap',
+                          flex: isMobile ? 1 : 'initial'
                         }}
                       >
                         🗑️ Borrar

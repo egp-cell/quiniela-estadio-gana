@@ -66,21 +66,21 @@ export default function Jugar() {
       <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-        <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: '20px 30px' }}>
-          <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+        <header style={{ background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', padding: isMobile ? '14px 14px' : '20px 30px' }}>
+          <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: isMobile ? 8 : 16 }}>
             <a href="/" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', padding: '6px 12px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}>
               <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
             </a>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 12, opacity: 0.85, letterSpacing: 1 }}>HOLA</div>
-              <h1 style={{ fontSize: 22, fontWeight: 800 }}>{logueado.nombre} 👋</h1>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: isMobile ? 10 : 12, opacity: 0.85, letterSpacing: 1 }}>HOLA</div>
+              <h1 style={{ fontSize: isMobile ? 14 : 22, fontWeight: 800, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{logueado.nombre} 👋</h1>
             </div>
-           <a href="/tabla" style={{ padding: '8px 16px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13, marginRight: 8 }}>🏆 Tabla</a>
-           <button onClick={logout} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>Salir</button>
+           <a href="/tabla" style={{ padding: isMobile ? '6px 10px' : '8px 16px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: isMobile ? 11 : 13, marginRight: isMobile ? 4 : 8, whiteSpace: 'nowrap', flexShrink: 0 }}>🏆 {isMobile ? '' : 'Tabla'}</a>
+           <button onClick={logout} style={{ padding: isMobile ? '6px 10px' : '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 12 : 14, whiteSpace: 'nowrap', flexShrink: 0 }}>Salir</button>
           </div>
         </header>
 
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: 30, flex: 1, width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: isMobile ? 14 : 30, flex: 1, width: '100%', boxSizing: 'border-box' }}>
           <h2 style={{ fontSize: 24, fontWeight: 800, color: COLORS.azulDetalle, marginBottom: 20 }}>Tus quinielas</h2>
 
           {logueado.quinielas.length === 0 ? (
