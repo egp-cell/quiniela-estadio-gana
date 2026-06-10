@@ -362,6 +362,9 @@ export default function Home() {
               <li style={{ padding: '8px 12px', background: COLORS.fondoNeutro, borderLeft: `3px solid ${COLORS.primario}`, borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Comisión organizador:</b> 7% (cubre operación y mantenimiento de la plataforma)</li>
               <li style={{ padding: '8px 12px', background: COLORS.fondoNeutro, borderLeft: `3px solid ${COLORS.primario}`, borderRadius: 4, marginBottom: 6, fontSize: 13 }}><b>Pago de premios:</b> tras la final. El organizador notificará a los ganadores por WhatsApp para coordinar la transferencia</li>
             </ul>
+            <p style={{ fontSize: 10, color: '#888', marginTop: 8, marginBottom: 0, fontStyle: 'italic', lineHeight: 1.4 }}>
+              *Los administradores se reservan el derecho de otorgar quinielas de cortesía. Estas quinielas no aportan a la bolsa pero participan normalmente en el ranking y pueden ganar premios.
+            </p>
 
             <h3 style={{ color: COLORS.azulDetalle, fontSize: 17, fontWeight: 800, marginTop: 24, marginBottom: 10 }}>⚖️ Empates en el ranking</h3>
             <p style={{ fontSize: 13, color: '#444', marginBottom: 10 }}>Si dos o más quinielas terminan con el mismo total de puntos, se desempata así:</p>
