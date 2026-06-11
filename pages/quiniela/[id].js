@@ -214,7 +214,10 @@ export default function PronosticosQuiniela() {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
               <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>← {isMobile ? 'Volver' : 'Mis quinielas'}</a>
-              <a href="/tabla" style={{ padding: isMobile ? '6px 12px' : '10px 20px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: isMobile ? 12 : 14, boxShadow: '0 3px 10px rgba(205,35,44,0.4)', whiteSpace: 'nowrap' }}>🏆 {isMobile ? 'Tabla' : 'Ver Tabla'}</a>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <a href="/entradas" style={{ padding: isMobile ? '6px 10px' : '10px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: isMobile ? 12 : 14, whiteSpace: 'nowrap' }}>🎟️ {isMobile ? '' : 'Entradas'}</a>
+                <a href="/tabla" style={{ padding: isMobile ? '6px 12px' : '10px 20px', background: COLORS.acentoCTA, color: 'white', borderRadius: 10, textDecoration: 'none', fontWeight: 800, fontSize: isMobile ? 12 : 14, boxShadow: '0 3px 10px rgba(205,35,44,0.4)', whiteSpace: 'nowrap' }}>🏆 {isMobile ? 'Tabla' : 'Ver Tabla'}</a>
+              </div>
             </div>
             <h1 style={{ fontSize: isMobile ? 16 : 22, fontWeight: 800, marginTop: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{data.quiniela?.nombre || 'Quiniela'}</h1>
             <div style={{ fontSize: isMobile ? 11 : 13, opacity: 0.9, marginTop: 2 }}>

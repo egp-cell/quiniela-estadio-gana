@@ -60,6 +60,9 @@ export default function TablaLideres() {
               <img src={SPONSOR.logo} alt={SPONSOR.nombre} style={{ height: isMobile ? 38 : 48, width: 'auto', display: 'block' }} />
             </a>
             <a href="/jugar" style={{ color: 'rgba(255,255,255,0.9)', fontSize: isMobile ? 12 : 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>← {isMobile ? 'Quinielas' : 'Volver a mis quinielas'}</a>
+            {usernameLogueado && (
+              <a href="/entradas" style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 6, textDecoration: 'none', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', flexShrink: 0 }}>🎟️ {isMobile ? '' : 'Entradas'}</a>
+            )}
             <button onClick={cargar} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>🔄</button>
           </div>
           <h1 style={{ fontSize: isMobile ? 22 : 28, fontWeight: 900, margin: 0 }}>🏆 Tabla de Líderes</h1>

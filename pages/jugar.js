@@ -75,6 +75,7 @@ export default function Jugar() {
               <div style={{ fontSize: isMobile ? 10 : 12, opacity: 0.85, letterSpacing: 1 }}>HOLA</div>
               <h1 style={{ fontSize: isMobile ? 14 : 22, fontWeight: 800, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{logueado.nombre} 👋</h1>
             </div>
+           <a href="/entradas" style={{ padding: isMobile ? '6px 10px' : '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: isMobile ? 11 : 13, marginRight: isMobile ? 4 : 8, whiteSpace: 'nowrap', flexShrink: 0 }}>🎟️ {isMobile ? '' : 'Entradas'}</a>
            <a href="/tabla" style={{ padding: isMobile ? '6px 10px' : '8px 16px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: isMobile ? 11 : 13, marginRight: isMobile ? 4 : 8, whiteSpace: 'nowrap', flexShrink: 0 }}>🏆 {isMobile ? '' : 'Tabla'}</a>
            <button onClick={logout} style={{ padding: isMobile ? '6px 10px' : '8px 16px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? 12 : 14, whiteSpace: 'nowrap', flexShrink: 0 }}>Salir</button>
           </div>
