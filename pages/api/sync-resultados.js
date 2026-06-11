@@ -89,6 +89,11 @@ function matchEquipo(nombreEs, nombreApi) {
 }
 
 export default async function handler(req, res) {
+  // Anti-cache: cualquier respuesta (200, 401, 500) debe ser fresca siempre.
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('CDN-Cache-Control', 'no-store');
+  res.setHeader('Vercel-CDN-Cache-Control', 'no-store');
+
   // Auth — acepta SYNC_SECRET (manual) o CRON_SECRET (Vercel Cron)
   const syncSecret = process.env.SYNC_SECRET;
   const cronSecret = process.env.CRON_SECRET;
