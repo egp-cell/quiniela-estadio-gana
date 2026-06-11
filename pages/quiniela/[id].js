@@ -28,6 +28,14 @@ export default function PronosticosQuiniela() {
   const [pronosticos, setPronosticos] = useState({});
   const [logueado, setLogueado] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [tickAhora, setTickAhora] = useState(0);
+
+  // Re-render cada 15s para re-evaluar qué partidos ya empezaron, así un
+  // partido se cierra solo aunque el usuario deje la pestaña abierta.
+  useEffect(() => {
+    const t = setInterval(() => setTickAhora(x => x + 1), 15000);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -167,6 +175,11 @@ export default function PronosticosQuiniela() {
   }
 
   function cambiarPronostico(partidoId, lado, valor) {
+    // Doble guarda: aunque el input venga "disabled", re-checamos la hora
+    // en el momento exacto. Si el partido ya empezó, ignoramos el cambio.
+    const partido = (data && data.partidos || []).find(x => x.id === partidoId);
+    if (partido && partidoEmpezado(partido.fecha_hora)) return;
+
     const actual = pronosticos[partidoId] || {};
     const nuevo = { ...actual };
     if (lado === 'local') nuevo.goles_local = valor;
@@ -179,6 +192,8 @@ export default function PronosticosQuiniela() {
       // Debounce: esperar 800ms después del último cambio
       clearTimeout(window[`debounce_${partidoId}`]);
       window[`debounce_${partidoId}`] = setTimeout(() => {
+        // Re-check al disparar el guardado (puede pasar el kickoff entre tipeo y guardado)
+        if (partido && partidoEmpezado(partido.fecha_hora)) return;
         guardarPronostico(partidoId, nuevo.goles_local, nuevo.goles_visitante);
       }, 800);
     }
@@ -285,12 +300,26 @@ export default function PronosticosQuiniela() {
                 borderRadius: 14,
                 padding: isMobile ? 14 : 20,
                 marginBottom: 12,
-                border: '1px solid #E0E0E0',
-                opacity: empezado ? 0.6 : 1
+                border: empezado ? '2px solid #C0C0C0' : '1px solid #E0E0E0',
+                position: 'relative'
               }}>
+                {empezado && (
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                    background: 'rgba(240, 242, 245, 0.88)',
+                    borderRadius: 14, zIndex: 5,
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                    gap: 6, cursor: 'not-allowed',
+                    backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)'
+                  }}>
+                    <div style={{ fontSize: 32 }}>🔒</div>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#333', letterSpacing: 1 }}>PARTIDO BLOQUEADO</div>
+                    <div style={{ fontSize: 11, color: '#666' }}>Ya inició · no se puede modificar</div>
+                  </div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14, fontSize: 12, color: '#888' }}>
                   <span>{p.fase}{p.grupo ? ` · Grupo ${p.grupo}` : ''}</span>
-                  <span>{formatearHora(p.fecha_hora)}{empezado ? ' · 🔒' : ''}</span>
+                  <span>{formatearHora(p.fecha_hora)}</span>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr auto 1fr' : '1fr auto 1fr', gap: isMobile ? 6 : 12, alignItems: 'center' }}>
