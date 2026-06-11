@@ -86,6 +86,17 @@ function diaIso(fechaIso) {
 }
 
 export default async function handler(req, res) {
+  // Auth: requiere token de IMPORT_SECRET (header Authorization Bearer o ?token=)
+  const importSecret = process.env.IMPORT_SECRET;
+  if (!importSecret) {
+    return res.status(500).json({ exito: false, error: 'Falta IMPORT_SECRET en variables de entorno' });
+  }
+  const auth = req.headers.authorization || '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : (req.query.token || '');
+  if (token !== importSecret) {
+    return res.status(401).json({ exito: false, error: 'Unauthorized: token inválido o ausente' });
+  }
+
   const apiKey = process.env.API_FOOTBALL_KEY;
   if (!apiKey) {
     return res.status(500).json({
