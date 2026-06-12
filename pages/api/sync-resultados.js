@@ -234,14 +234,64 @@ export default async function handler(req, res) {
         continue;
       }
 
+      // ─── CALCULAR PUNTUACIONES (mismo flujo que /api/capturar-resultado) ───
+      // 1. Borrar puntuaciones viejas de este partido
+      await supabase.from('puntuaciones').delete().eq('partido_id', p.id);
+
+      // 2. Cargar pronósticos del partido
+      const { data: pronosticosP } = await supabase
+        .from('pronosticos').select('*').eq('partido_id', p.id);
+
+      let exactos = 0, aciertosGanador = 0;
+      const puntuacionesInsert = [];
+      for (const pron of (pronosticosP || [])) {
+        let puntos = 0, tipo = 'Sin acierto';
+        if (pron.goles_local === nuevoLocal && pron.goles_visitante === nuevoVisitante) {
+          puntos = 5; tipo = 'Marcador exacto'; exactos++;
+        } else {
+          const resReal = nuevoLocal > nuevoVisitante ? 'local' : (nuevoLocal < nuevoVisitante ? 'visitante' : 'empate');
+          const resPron = pron.goles_local > pron.goles_visitante ? 'local' : (pron.goles_local < pron.goles_visitante ? 'visitante' : 'empate');
+          if (resReal === resPron) { puntos = 3; tipo = 'Ganador acertado'; aciertosGanador++; }
+        }
+        puntuacionesInsert.push({
+          quiniela_id: pron.quiniela_id, partido_id: p.id, puntos, tipo
+        });
+      }
+      if (puntuacionesInsert.length > 0) {
+        await supabase.from('puntuaciones').insert(puntuacionesInsert);
+      }
+
+      // 3. Recalcular total de puntos de cada quiniela afectada
+      const quinielaIdsAfectadas = [...new Set((pronosticosP || []).map(x => x.quiniela_id))];
+      for (const qId of quinielaIdsAfectadas) {
+        const { data: pts } = await supabase
+          .from('puntuaciones').select('puntos').eq('quiniela_id', qId);
+        const total = (pts || []).reduce((s, x) => s + (x.puntos || 0), 0);
+        await supabase.from('quinielas').update({ puntos: total }).eq('id', qId);
+      }
+
       actualizados.push({
         partido_id: p.id,
         local: p.local, visitante: p.visitante,
         marcador: `${nuevoLocal}-${nuevoVisitante}`,
         orden_api: orden,
         api_home: homeApi, api_away: awayApi,
-        status_api: status
+        status_api: status,
+        pronosticos_evaluados: (pronosticosP || []).length,
+        marcadores_exactos: exactos,
+        ganadores_acertados: aciertosGanador
       });
+    }
+
+    // ─── Recalcular POSICIONES globales una sola vez si hubo actualizaciones ───
+    if (actualizados.length > 0) {
+      const { data: todas } = await supabase
+        .from('quinielas').select('id, puntos').order('puntos', { ascending: false });
+      if (todas) {
+        for (let i = 0; i < todas.length; i++) {
+          await supabase.from('quinielas').update({ posicion: i + 1 }).eq('id', todas[i].id);
+        }
+      }
     }
 
     return res.status(200).json({
@@ -253,7 +303,8 @@ export default async function handler(req, res) {
         actualizados: actualizados.length,
         sin_cambio: sinCambio.length,
         aun_no_finalizados: noFinalizados.length,
-        errores: errores.length
+        errores: errores.length,
+        posiciones_recalculadas: actualizados.length > 0
       },
       actualizados,
       sin_cambio: sinCambio,
