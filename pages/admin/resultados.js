@@ -23,11 +23,21 @@ export default function AdminResultados() {
   const [resultados, setResultados] = useState({});
   const [guardando, setGuardando] = useState({});
   const [isMobile, setIsMobile] = useState(false);
+  const [autenticado, setAutenticado] = useState(false);
+  const [montado, setMontado] = useState(false);
 
   useEffect(() => {
+    setMontado(true);
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener('resize', check);
+    try {
+      if (sessionStorage.getItem('admin_sesion') === 'ok') {
+        setAutenticado(true);
+      } else {
+        window.location.href = '/admin';
+      }
+    } catch (e) {}
     return () => window.removeEventListener('resize', check);
   }, []);
 
@@ -49,7 +59,7 @@ export default function AdminResultados() {
     setCargando(false);
   }
 
-  useEffect(() => { cargar(); }, []);
+  useEffect(() => { if (autenticado) cargar(); }, [autenticado]);
 async function borrarResultado(partidoId) {
     if (!confirm('¿Borrar el resultado de este partido?\n\nEsto eliminará los puntos calculados de TODAS las quinielas para este partido y recalculará el ranking.')) return;
 
@@ -127,6 +137,8 @@ async function borrarResultado(partidoId) {
     if (filtro === 'finalizados') return p.estado === 'Finalizado';
     return true;
   });
+
+  if (!montado || !autenticado) return null;
 
   return (
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

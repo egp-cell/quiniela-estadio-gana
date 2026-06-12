@@ -14,13 +14,53 @@ export default function Admin() {
   const [aprobando, setAprobando] = useState(false);
   const [cargando, setCargando] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [autenticado, setAutenticado] = useState(false);
+  const [passInput, setPassInput] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [logueando, setLogueando] = useState(false);
+  const [montado, setMontado] = useState(false);
 
   useEffect(() => {
+    setMontado(true);
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener('resize', check);
+    // Restaurar sesión si existe
+    try {
+      if (sessionStorage.getItem('admin_sesion') === 'ok') setAutenticado(true);
+    } catch (e) {}
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  async function intentarLogin(e) {
+    e.preventDefault();
+    if (logueando) return;
+    setLogueando(true);
+    setLoginError('');
+    try {
+      const r = await fetch('/api/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passInput })
+      });
+      const d = await r.json();
+      if (d.exito) {
+        sessionStorage.setItem('admin_sesion', 'ok');
+        setAutenticado(true);
+        setPassInput('');
+      } else {
+        setLoginError(d.error || 'Contraseña incorrecta');
+      }
+    } catch (e) {
+      setLoginError('Error de conexión');
+    }
+    setLogueando(false);
+  }
+
+  function cerrarSesionAdmin() {
+    sessionStorage.removeItem('admin_sesion');
+    setAutenticado(false);
+  }
 
   async function cargar() {
     try {
@@ -32,10 +72,11 @@ export default function Admin() {
   }
 
   useEffect(() => {
+    if (!autenticado) return;
     cargar();
     const t = setInterval(cargar, 30000);
     return () => clearInterval(t);
-  }, []);
+  }, [autenticado]);
 
   function abrirAprobar(u) {
     setAprobarModal(u);
@@ -146,6 +187,44 @@ export default function Admin() {
       );
     });
 
+  if (!montado) return null;
+
+  if (!autenticado) {
+    return (
+      <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <div style={{ background: 'white', borderRadius: 24, maxWidth: 420, width: '100%', padding: 36, boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
+          <div style={{ textAlign: 'center', marginBottom: 28 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🔐</div>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: COLORS.azulDetalle, marginBottom: 4 }}>Panel Admin</h1>
+            <p style={{ color: '#666', fontSize: 13 }}>Acceso restringido</p>
+          </div>
+          <form onSubmit={intentarLogin}>
+            <label style={{ fontSize: 12, color: '#666', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1 }}>Contraseña</label>
+            <input
+              type="password"
+              required
+              autoFocus
+              value={passInput}
+              onChange={e => setPassInput(e.target.value)}
+              placeholder="••••••••"
+              style={{ width: '100%', padding: 14, marginTop: 6, border: '1.5px solid #E0E0E0', borderRadius: 10, fontSize: 16, fontFamily: 'monospace', boxSizing: 'border-box' }}
+            />
+            {loginError && (
+              <div style={{ marginTop: 12, padding: 12, background: '#FFE5E5', color: '#C62828', borderRadius: 8, fontSize: 13 }}>{loginError}</div>
+            )}
+            <button type="submit" disabled={logueando} style={{ width: '100%', marginTop: 18, padding: 14, background: logueando ? '#9CA3AF' : `linear-gradient(135deg, ${COLORS.primario}, ${COLORS.primarioOscuro})`, color: 'white', border: 'none', borderRadius: 12, fontSize: 15, fontWeight: 700, cursor: logueando ? 'not-allowed' : 'pointer' }}>
+              {logueando ? 'Entrando…' : 'Entrar al panel →'}
+            </button>
+          </form>
+          <div style={{ marginTop: 18, textAlign: 'center' }}>
+            <a href="/" style={{ fontSize: 12, color: '#888', textDecoration: 'none' }}>← Volver al inicio</a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: COLORS.fondoNeutro, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -162,6 +241,7 @@ export default function Admin() {
             <a href="/api/admin-exportar-pronosticos" style={{ padding: '8px 14px', background: COLORS.azulDetalle, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0 }}>📥 {isMobile ? 'Descargar' : 'Descargar pronósticos'}</a>
             <a href="/admin/resultados" style={{ padding: '8px 14px', background: COLORS.acentoCTA, color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0 }}>⚽ {isMobile ? 'Resultados' : 'Capturar resultados'}</a>
             <button onClick={cargar} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>🔄</button>
+            <button onClick={cerrarSesionAdmin} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0, fontSize: 13 }}>🔒 Salir</button>
           </div>
         </div>
       </header>
