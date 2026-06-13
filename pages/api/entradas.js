@@ -22,14 +22,23 @@ export default async function handler(req, res) {
       .order('fecha_hora', { ascending: true });
     if (ePart) return res.status(500).json({ exito: false, error: ePart.message });
 
-    // 2. Quinielas con el username del dueño (para identificar las propias en el cliente)
+    // 2. Quinielas con el username del dueño (para identificar las propias en el cliente).
+    //    range(0, 9999) sube el LIMIT por defecto de Supabase (1000) para soportar
+    //    miles de quinielas sin recortes silenciosos.
     const { data: quinielas, error: eQ } = await supabase
       .from('quinielas')
       .select('id, usuario_id, nombre, usuarios(usuario, estado)')
-      .order('id');
+      .order('id')
+      .range(0, 9999);
     if (eQ) return res.status(500).json({ exito: false, error: eQ.message });
 
-    const activas = (quinielas || []).filter(q => q.usuarios && q.usuarios.estado === 'Activo');
+    // Paridad con la lógica de puntos: el cálculo de puntuaciones NO filtra
+    // por usuarios.estado ni por presencia del usuario. Entonces el grid debe
+    // mostrar las MISMAS quinielas, todas. Antes filtrábamos
+    // `q.usuarios && q.usuarios.estado === 'Activo'` — eso descartaba
+    // quinielas cuando el embed de Supabase devolvía `usuarios` como array,
+    // cuando el dueño cambió a otro estado, o si quedaba huérfana.
+    const todas = quinielas || [];
 
     // 3. CRÍTICO anti-trampa: solo IDs de partidos cuyo fecha_hora ya pasó.
     //    Comparación con Date.getTime() para evitar bug de comparar strings ISO
@@ -61,12 +70,16 @@ export default async function handler(req, res) {
       exito: true,
       ahora: ahoraIso,
       partidos: partidos || [],
-      quinielas: activas.map(q => ({
-        id: q.id,
-        usuario_id: q.usuario_id,
-        nombre: q.nombre,
-        username: q.usuarios ? q.usuarios.usuario : null
-      })),
+      quinielas: todas.map(q => {
+        // Supabase a veces devuelve el embed como array, a veces como objeto.
+        const u = Array.isArray(q.usuarios) ? q.usuarios[0] : q.usuarios;
+        return {
+          id: q.id,
+          usuario_id: q.usuario_id,
+          nombre: q.nombre,
+          username: u ? u.usuario : null
+        };
+      }),
       pronosticos
     });
   } catch (error) {
