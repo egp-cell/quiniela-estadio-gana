@@ -294,30 +294,42 @@ export default function PronosticosQuiniela() {
             const pron = pronosticos[p.id] || {};
             const estadoGuardado = guardando[p.id];
 
+            // Color de la card según resultado vs pronóstico (solo si ya empezó)
+            const tieneResOficial = p.goles_local !== null && p.goles_local !== undefined &&
+                                    p.goles_visitante !== null && p.goles_visitante !== undefined;
+            const tienePron = pron.goles_local !== undefined && pron.goles_local !== '' &&
+                              pron.goles_visitante !== undefined && pron.goles_visitante !== '';
+            let bgCard = 'white';
+            let bordeCard = '1px solid #E0E0E0';
+            let etiquetaResultado = null; // texto de "Partido cerrado · resultado X-Y"
+            if (empezado) {
+              bordeCard = '1px solid #D0D5DB';
+              if (tieneResOficial && tienePron) {
+                const pgl = parseInt(pron.goles_local);
+                const pgv = parseInt(pron.goles_visitante);
+                const exacto = pgl === p.goles_local && pgv === p.goles_visitante;
+                if (exacto) {
+                  bgCard = '#FAEEDA'; // dorado claro
+                } else {
+                  const resReal = p.goles_local > p.goles_visitante ? 'L' : (p.goles_local < p.goles_visitante ? 'V' : 'E');
+                  const resPron = pgl > pgv ? 'L' : (pgl < pgv ? 'V' : 'E');
+                  bgCard = resReal === resPron ? '#D6EFE0' : '#FAD8DA';
+                }
+                etiquetaResultado = `Resultado oficial: ${p.goles_local} - ${p.goles_visitante}`;
+              } else {
+                bgCard = '#F4F5F7'; // gris neutro: aún sin resultado oficial o sin pronóstico
+              }
+            }
+
             return (
               <div key={p.id} style={{
-                background: 'white',
+                background: bgCard,
                 borderRadius: 14,
                 padding: isMobile ? 14 : 20,
                 marginBottom: 12,
-                border: empezado ? '2px solid #C0C0C0' : '1px solid #E0E0E0',
-                position: 'relative'
+                border: bordeCard
               }}>
-                {empezado && (
-                  <div style={{
-                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'rgba(240, 242, 245, 0.88)',
-                    borderRadius: 14, zIndex: 5,
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                    gap: 6, cursor: 'not-allowed',
-                    backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)'
-                  }}>
-                    <div style={{ fontSize: 32 }}>🔒</div>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#333', letterSpacing: 1 }}>PARTIDO BLOQUEADO</div>
-                    <div style={{ fontSize: 11, color: '#666' }}>Ya inició · no se puede modificar</div>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14, fontSize: 12, color: '#888' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14, fontSize: 12, color: '#666' }}>
                   <span>{p.fase}{p.grupo ? ` · Grupo ${p.grupo}` : ''}</span>
                   <span>{formatearHora(p.fecha_hora)}</span>
                 </div>
@@ -346,7 +358,10 @@ export default function PronosticosQuiniela() {
                         fontWeight: 800,
                         border: '2px solid ' + (estadoGuardado === 'guardado' ? COLORS.verdeExito : estadoGuardado === 'error' ? '#E04444' : '#E0E0E0'),
                         borderRadius: 10,
-                        background: empezado ? '#F0F2F5' : 'white',
+                        background: empezado ? 'rgba(255,255,255,0.6)' : 'white',
+                        color: empezado ? '#222' : 'inherit',
+                        opacity: 1,
+                        WebkitTextFillColor: empezado ? '#222' : 'inherit',
                         padding: 0,
                         boxSizing: 'border-box'
                       }}
@@ -367,7 +382,10 @@ export default function PronosticosQuiniela() {
                         fontWeight: 800,
                         border: '2px solid ' + (estadoGuardado === 'guardado' ? COLORS.verdeExito : estadoGuardado === 'error' ? '#E04444' : '#E0E0E0'),
                         borderRadius: 10,
-                        background: empezado ? '#F0F2F5' : 'white',
+                        background: empezado ? 'rgba(255,255,255,0.6)' : 'white',
+                        color: empezado ? '#222' : 'inherit',
+                        opacity: 1,
+                        WebkitTextFillColor: empezado ? '#222' : 'inherit',
                         padding: 0,
                         boxSizing: 'border-box'
                       }}
@@ -381,7 +399,13 @@ export default function PronosticosQuiniela() {
                   </div>
                 </div>
 
-                {estadoGuardado && (
+                {empezado && (
+                  <div style={{ textAlign: 'center', marginTop: 10, fontSize: 11, fontWeight: 600, color: '#666', letterSpacing: 0.5 }}>
+                    🔒 Partido cerrado{etiquetaResultado ? ` · ${etiquetaResultado}` : ''}
+                  </div>
+                )}
+
+                {!empezado && estadoGuardado && (
                   <div style={{ textAlign: 'center', marginTop: 10, fontSize: 11, fontWeight: 600, color: estadoGuardado === 'guardado' ? COLORS.verdeExito : estadoGuardado === 'error' ? '#E04444' : '#888' }}>
                     {estadoGuardado === 'guardando' && '💾 Guardando...'}
                     {estadoGuardado === 'guardado' && '✓ Guardado'}
