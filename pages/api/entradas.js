@@ -22,22 +22,31 @@ export default async function handler(req, res) {
       .order('fecha_hora', { ascending: true });
     if (ePart) return res.status(500).json({ exito: false, error: ePart.message });
 
-    // 2. Quinielas con el username del dueño (para identificar las propias en el cliente).
-    //    range(0, 9999) sube el LIMIT por defecto de Supabase (1000) para soportar
-    //    miles de quinielas sin recortes silenciosos.
+    // 2a. Quinielas SIN embed. El embed `usuarios(...)` puede comportarse como
+    //     INNER JOIN silenciosamente cuando PostgREST no resuelve la FK para
+    //     filas específicas, dejándolas afuera sin error. Lo evitamos haciendo
+    //     dos queries y combinando en memoria. range(0, 9999) sube el LIMIT
+    //     default de Supabase (1000) para soportar miles de filas.
     const { data: quinielas, error: eQ } = await supabase
       .from('quinielas')
-      .select('id, usuario_id, nombre, usuarios(usuario, estado)')
+      .select('id, usuario_id, nombre')
       .order('id')
       .range(0, 9999);
     if (eQ) return res.status(500).json({ exito: false, error: eQ.message });
 
+    // 2b. Usuarios — solo lo mínimo para mostrar el username.
+    const { data: usuariosData, error: eU } = await supabase
+      .from('usuarios')
+      .select('id, usuario')
+      .range(0, 9999);
+    if (eU) return res.status(500).json({ exito: false, error: eU.message });
+
+    const usernameById = {};
+    (usuariosData || []).forEach(u => { usernameById[u.id] = u.usuario; });
+
     // Paridad con la lógica de puntos: el cálculo de puntuaciones NO filtra
-    // por usuarios.estado ni por presencia del usuario. Entonces el grid debe
-    // mostrar las MISMAS quinielas, todas. Antes filtrábamos
-    // `q.usuarios && q.usuarios.estado === 'Activo'` — eso descartaba
-    // quinielas cuando el embed de Supabase devolvía `usuarios` como array,
-    // cuando el dueño cambió a otro estado, o si quedaba huérfana.
+    // por estado del usuario ni por presencia del usuario. El grid debe
+    // mostrar las MISMAS quinielas, todas.
     const todas = quinielas || [];
 
     // 3. CRÍTICO anti-trampa: solo IDs de partidos cuyo fecha_hora ya pasó.
@@ -58,7 +67,8 @@ export default async function handler(req, res) {
       const { data: pr, error: ePr } = await supabase
         .from('pronosticos')
         .select('quiniela_id, partido_id, goles_local, goles_visitante')
-        .in('partido_id', partidosIniciadosIds);
+        .in('partido_id', partidosIniciadosIds)
+        .range(0, 99999);  // muchos pronósticos posibles, evitar corte a 1000
       if (ePr) return res.status(500).json({ exito: false, error: ePr.message });
       pronosticos = pr || [];
     }
@@ -70,17 +80,19 @@ export default async function handler(req, res) {
       exito: true,
       ahora: ahoraIso,
       partidos: partidos || [],
-      quinielas: todas.map(q => {
-        // Supabase a veces devuelve el embed como array, a veces como objeto.
-        const u = Array.isArray(q.usuarios) ? q.usuarios[0] : q.usuarios;
-        return {
-          id: q.id,
-          usuario_id: q.usuario_id,
-          nombre: q.nombre,
-          username: u ? u.usuario : null
-        };
-      }),
-      pronosticos
+      quinielas: todas.map(q => ({
+        id: q.id,
+        usuario_id: q.usuario_id,
+        nombre: q.nombre,
+        username: usernameById[q.usuario_id] || null
+      })),
+      pronosticos,
+      diag: {
+        quinielas_count: todas.length,
+        usuarios_count: (usuariosData || []).length,
+        pronosticos_count: pronosticos.length,
+        partidos_iniciados_count: partidosIniciadosIds.length
+      }
     });
   } catch (error) {
     console.error('Error entradas:', error);
