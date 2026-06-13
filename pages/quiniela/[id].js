@@ -309,11 +309,11 @@ export default function PronosticosQuiniela() {
                 const pgv = parseInt(pron.goles_visitante);
                 const exacto = pgl === p.goles_local && pgv === p.goles_visitante;
                 if (exacto) {
-                  bgCard = '#FAEEDA'; // dorado claro
+                  bgCard = '#D6EFE0'; // verde claro — exacto
                 } else {
                   const resReal = p.goles_local > p.goles_visitante ? 'L' : (p.goles_local < p.goles_visitante ? 'V' : 'E');
                   const resPron = pgl > pgv ? 'L' : (pgl < pgv ? 'V' : 'E');
-                  bgCard = resReal === resPron ? '#D6EFE0' : '#FAD8DA';
+                  bgCard = resReal === resPron ? '#FFF4B8' : '#FAD8DA'; // amarillo ganador/empate, rojo falló
                 }
                 etiquetaResultado = `Resultado oficial: ${p.goles_local} - ${p.goles_visitante}`;
               } else {

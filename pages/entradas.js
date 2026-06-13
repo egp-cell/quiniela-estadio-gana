@@ -127,12 +127,12 @@ export default function Entradas() {
     }
     const exacto = pr.gl === p.goles_local && pr.gv === p.goles_visitante;
     if (exacto) {
-      return { bg: COLORS.dorado, text: txt, color: COLORS.azulDetalle, fontSize: 12, weight: 800 };
+      return { bg: '#D6EFE0', text: txt, color: '#0F5D2F', fontSize: 12, weight: 800 };
     }
     const resReal = p.goles_local > p.goles_visitante ? 'L' : (p.goles_local < p.goles_visitante ? 'V' : 'E');
     const resPron = pr.gl > pr.gv ? 'L' : (pr.gl < pr.gv ? 'V' : 'E');
     if (resReal === resPron) {
-      return { bg: '#D6EFE0', text: txt, color: '#0F5D2F', fontSize: 12, weight: 700 };
+      return { bg: '#FFF4B8', text: txt, color: '#7A5C00', fontSize: 12, weight: 700 };
     }
     return { bg: '#FAD8DA', text: txt, color: '#7B1E22', fontSize: 12, weight: 700 };
   }
@@ -183,8 +183,8 @@ export default function Entradas() {
       <div style={{ background: 'white', borderBottom: '1px solid #E0E0E0', padding: isMobile ? '8px 12px' : '12px 20px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', gap: 14, flexWrap: 'wrap', fontSize: 12, color: '#555', alignItems: 'center' }}>
           <span style={{ fontWeight: 700, color: COLORS.azulDetalle }}>Leyenda:</span>
-          <span><span style={{ display: 'inline-block', width: 14, height: 14, background: COLORS.dorado, borderRadius: 3, verticalAlign: 'middle', marginRight: 4 }}/> Exacto</span>
-          <span><span style={{ display: 'inline-block', width: 14, height: 14, background: '#D6EFE0', borderRadius: 3, verticalAlign: 'middle', marginRight: 4 }}/> Resultado</span>
+          <span><span style={{ display: 'inline-block', width: 14, height: 14, background: '#D6EFE0', borderRadius: 3, verticalAlign: 'middle', marginRight: 4 }}/> Exacto</span>
+          <span><span style={{ display: 'inline-block', width: 14, height: 14, background: '#FFF4B8', borderRadius: 3, verticalAlign: 'middle', marginRight: 4 }}/> Resultado</span>
           <span><span style={{ display: 'inline-block', width: 14, height: 14, background: '#FAD8DA', borderRadius: 3, verticalAlign: 'middle', marginRight: 4 }}/> Falló</span>
           <span>🔒 Por iniciar</span>
           <span>— Sin pronóstico</span>
