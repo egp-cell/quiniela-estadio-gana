@@ -78,10 +78,16 @@ export default function Entradas() {
   const partidos = (data && data.partidos) || [];
   const quinielas = (data && data.quinielas) || [];
 
-  // Set de IDs de partidos que YA iniciaron (según hora local del cliente)
+  // Set de IDs de partidos que YA iniciaron (según hora local del cliente).
+  // Comparación con Date.getTime() — string ISO comparison falla cuando los
+  // formatos difieren (+00:00 vs Z).
   const partidosIniciados = useMemo(() => {
-    const ahoraIso = ahora.toISOString();
-    return new Set(partidos.filter(p => p.fecha_hora && p.fecha_hora <= ahoraIso).map(p => p.id));
+    const ahoraMs = ahora.getTime();
+    return new Set(partidos.filter(p => {
+      if (!p.fecha_hora) return false;
+      const t = new Date(p.fecha_hora).getTime();
+      return !isNaN(t) && t <= ahoraMs;
+    }).map(p => p.id));
   }, [partidos, ahora]);
 
   // pron[quinielaId][partidoId] = { gl, gv }

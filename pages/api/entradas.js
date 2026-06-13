@@ -13,6 +13,7 @@ export default async function handler(req, res) {
   try {
     const ahora = new Date();
     const ahoraIso = ahora.toISOString();
+    const ahoraMs = ahora.getTime();
 
     // 1. Todos los partidos (para encabezados, aunque no hayan iniciado)
     const { data: partidos, error: ePart } = await supabase
@@ -30,9 +31,15 @@ export default async function handler(req, res) {
 
     const activas = (quinielas || []).filter(q => q.usuarios && q.usuarios.estado === 'Activo');
 
-    // 3. CRÍTICO anti-trampa: solo IDs de partidos cuyo fecha_hora ya pasó
+    // 3. CRÍTICO anti-trampa: solo IDs de partidos cuyo fecha_hora ya pasó.
+    //    Comparación con Date.getTime() para evitar bug de comparar strings ISO
+    //    con formatos distintos (+00:00 vs Z) — eso devolvía falsos negativos.
     const partidosIniciadosIds = (partidos || [])
-      .filter(p => p.fecha_hora && p.fecha_hora <= ahoraIso)
+      .filter(p => {
+        if (!p.fecha_hora) return false;
+        const t = new Date(p.fecha_hora).getTime();
+        return !isNaN(t) && t <= ahoraMs;
+      })
       .map(p => p.id);
 
     // 4. Pronósticos SOLO de partidos ya iniciados. Nunca se exponen al cliente
